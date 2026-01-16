@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
 import 'registro_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,9 +15,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _contrasena = TextEditingController();
-
-  final String _emailUser = "daniel@gmail.com";
-  final String _contrasenaUser = "1234";
 
   String error = "";
 
@@ -67,25 +66,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 SizedBox(height: espacio),
 
-                if (error.isNotEmpty)
-                  Text(
-                    error,
-                    style: const TextStyle(color: Colors.red),
-                  ),
+                Text(error, style: const TextStyle(color: Colors.red),),
 
                 SizedBox(height: espacio),
 
                 CustomButton(
                   text: "Iniciar sesión",
-                  onPressed: () {
-                    setState(() {
-                      if (_email.text == _emailUser &&
-                          _contrasena.text == _contrasenaUser) {
-                        error = "Te has logueado";
+                  onPressed: ()async {
+                      if (_email.text == "" && _contrasena.text == "") {
+                        setState(() {
+                          error = "Tienes que poner tu usuario y contraseña";
+                        });
                       } else {
-                        error = "Email o contraseña incorrectos";
+                        try {
+                          await FirebaseAuth.instance.signInWithEmailAndPassword(
+                            email: _email.text,
+                            password: _contrasena.text,
+                          );
+                          setState(() {
+                            error = "Te has logueado";
+                          });
+                        }catch (e) {
+                          setState(() {
+                            error = "Email o contraseña incorrectos";
+                          });
+                        }
                       }
-                    });
                   },
                 ),
 
