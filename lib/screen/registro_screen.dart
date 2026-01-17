@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
+import 'login_screen.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});
@@ -78,6 +79,23 @@ class _RegistroScreenState extends State<RegistroScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
+                ),
+
+                SizedBox(height: espacio),
+
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => LoginScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Volver al login",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),

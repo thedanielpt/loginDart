@@ -64,9 +64,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscure: true,
                 ),
 
-                SizedBox(height: espacio),
-
-                Text(error, style: const TextStyle(color: Colors.red),),
+                if (error  != "") ...[
+                  SizedBox(height: espacio),
+                  Text(
+                    error,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ],
 
                 SizedBox(height: espacio),
 
@@ -76,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (_email.text == "" && _contrasena.text == "") {
                         setState(() {
                           error = "Tienes que poner tu usuario y contraseña";
+
                         });
                       } else {
                         try {
