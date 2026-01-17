@@ -77,6 +77,11 @@ class _RegistroScreenState extends State<RegistroScreen> {
                 CustomButton(
                   text: "Registrarse",
                   onPressed: () {
+
+                    if (_email == "" || _password == "" || _repeatPassword != _password) {
+                      return;
+                    }
+
                     Navigator.pop(context);
                   },
                 ),

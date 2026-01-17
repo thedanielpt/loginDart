@@ -77,27 +77,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomButton(
                   text: "Iniciar sesión",
                   onPressed: ()async {
-                      if (_email.text == "" && _contrasena.text == "") {
-                        setState(() {
-                          error = "Tienes que poner tu usuario y contraseña";
+                    //Comprueba has dejado en blanco algun dato
+                    if (_email.text == "" || _contrasena.text == "") {
+                      setState(() {
+                        error = "Falta poner el email o contraseña";
+                      });
+                      return;
+                    }
 
-                        });
-                      } else {
-                        try {
-                          await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: _email.text,
-                            password: _contrasena.text,
-                          );
-                          setState(() {
-                            error = "Te has logueado";
-                          });
-                        }catch (e) {
-                          setState(() {
-                            error = "Email o contraseña incorrectos";
-                          });
-                        }
-                      }
-                  },
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: _email.text,
+                        password: _contrasena.text,
+                      );
+                      setState(() {
+                        error = "Te has logueado";
+                      });
+                    }catch (e) {
+                      setState(() {
+                        error = "Email o contraseña incorrectos";
+                      });
+                    }
+                  }
                 ),
 
                 TextButton(
