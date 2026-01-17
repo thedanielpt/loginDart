@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../validaciones/Validaciones.dart' as Validaciones;
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
 import 'login_screen.dart';
@@ -76,11 +77,25 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
                 CustomButton(
                   text: "Registrarse",
-                  onPressed: () {
+                  onPressed: () async {
 
-                    if (_email == "" || _password == "" || _repeatPassword != _password) {
+                    //Comprueba si el email o contraseña estan vacios
+                    if (_email == "" || _password == "") {
                       return;
                     }
+
+                    //Comprueba si las contraseñas coinciden
+                    if (_password.text != _repeatPassword.text) {
+                      return;
+                    }
+
+                    if (await Validaciones.registrarUsuario(_email, _password)) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => LoginScreen()),
+                      );
+                    }
+
 
                     Navigator.pop(context);
                   },
