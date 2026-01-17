@@ -40,3 +40,18 @@ Future<bool> registrarUsuario(emailController, passwordController) async {
   }
   return false;
 }
+
+Future<bool> iniciarSesion(email, contrasena) async {
+
+  try {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email.text,
+      password: contrasena.text,
+    );
+    return true;
+  }catch (e) {
+    print(e);
+  }
+
+  return false;
+}

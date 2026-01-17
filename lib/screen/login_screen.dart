@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../validaciones/Validaciones.dart' as Validaciones;
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
 import 'registro_screen.dart';
@@ -85,15 +86,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       return;
                     }
 
-                    try {
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: _email.text,
-                        password: _contrasena.text,
-                      );
+                    if (await Validaciones.iniciarSesion(_email, _contrasena)){
                       setState(() {
-                        error = "Te has logueado";
+                        error = "Has iniciado sesión";
                       });
-                    }catch (e) {
+                    } else {
                       setState(() {
                         error = "Email o contraseña incorrectos";
                       });
