@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../validaciones/Validaciones.dart' as Validaciones;
+import '../authentication/Authentication.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
-import 'login_screen.dart';
+import 'loginScreen.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});
@@ -15,6 +15,8 @@ class _RegistroScreenState extends State<RegistroScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _repeatPassword = TextEditingController();
+
+  final Authentication _authentication = Authentication();
 
   @override
   Widget build(BuildContext context) {
@@ -89,13 +91,12 @@ class _RegistroScreenState extends State<RegistroScreen> {
                       return;
                     }
 
-                    if (await Validaciones.registrarUsuario(_email, _password)) {
+                    if (await _authentication.registrarUsuario(_email, _password)) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => LoginScreen()),
                       );
                     }
-
 
                     Navigator.pop(context);
                   },

@@ -1,9 +1,9 @@
+import 'package:fluter_maricarmen/screen/passwordForgetScreen.dart';
 import 'package:flutter/material.dart';
-import '../validaciones/Validaciones.dart' as Validaciones;
+import '../authentication/Authentication.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
-import 'registro_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'registroScreen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +16,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _contrasena = TextEditingController();
+
+  final Authentication _authentication = Authentication();
 
   String error = "";
 
@@ -78,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomButton(
                   text: "Iniciar sesión",
                   onPressed: ()async {
+
                     //Comprueba has dejado en blanco algun dato
                     if (_email.text == "" || _contrasena.text == "") {
                       setState(() {
@@ -86,7 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       return;
                     }
 
-                    if (await Validaciones.iniciarSesion(_email, _contrasena)){
+                    //Comprueba si el usuario existe
+                    if (await _authentication.iniciarSesion(_email, _contrasena)){
                       setState(() {
                         error = "Has iniciado sesión";
                       });
@@ -109,6 +113,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: const Text(
                     "¿No tienes cuenta? Regístrate",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => passwordForgetScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "¿Te has olvidado de tu contraseña?",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

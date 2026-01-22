@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "223107202151",
+    "project_id": "gessportflutter",
+    "storage_bucket": "gessportflutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223107202151:android:45d82829c459834ea568c2",
+        "android_client_info": {
+          "package_name": "com.example.fluter_maricarmen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "223107202151-otos1j4b8ter384lrngfsdd46lao3e0f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGFz8ygrUD6EnsebCsXXKoLEk2UyTbB5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "223107202151-otos1j4b8ter384lrngfsdd46lao3e0f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
