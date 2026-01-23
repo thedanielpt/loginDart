@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'loginScreen.dart';
+import '../authentication/Authentication.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
 
@@ -20,6 +21,10 @@ class _passwordForgetScreenState extends State<passwordForgetScreen> {
     double anchoPantalla = MediaQuery.of(context).size.width * 0.8;
     double altoPantalla = MediaQuery.of(context).size.height * 0.75;
     double espacio = altoPantalla * 0.06;
+
+    final Authentication _authentication = Authentication();
+
+
 
     return Container(
       decoration: const BoxDecoration(
@@ -67,7 +72,6 @@ class _passwordForgetScreenState extends State<passwordForgetScreen> {
                 SizedBox(height: espacio),
 
                 if (error  != "") ...[
-                  SizedBox(height: espacio),
                   Text(
                     error,
                     style: const TextStyle(color: Colors.red),
@@ -77,15 +81,42 @@ class _passwordForgetScreenState extends State<passwordForgetScreen> {
                 SizedBox(height: espacio),
 
                 CustomButton(
-                    text: "Iniciar sesión",
-                    onPressed: ()async {
-                      //Comprueba has dejado en blanco algun dato
-                      if (_email.text == "") {
-                        setState(() {
-                          error = "Falta poner el email";
-                        });
-                      }  
+                  text: "Enviar email",
+                  onPressed: ()async {
+                    if (_email.text == "") {
+                      setState(() {
+                        error = "Falta poner el email";
+                      });
+                      return;
                     }
+                    if (await _authentication.enviarEmailResetPassword(_email.text.trim())){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => LoginScreen(),
+                        ),
+                      );
+                    } else {
+                      setState(() {
+                        error = "Email incorrecto";
+                      });
+                    }
+                  }
+                ),
+
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => LoginScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Volver al login",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),

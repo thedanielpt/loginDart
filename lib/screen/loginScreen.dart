@@ -24,8 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     double anchoPantalla = MediaQuery.of(context).size.width * 0.8;
-    double altoPantalla = MediaQuery.of(context).size.height * 0.75;
-    double espacio = altoPantalla * 0.06;
+    double altoPantalla = MediaQuery.of(context).size.height * 0.78;
+    double espacio = altoPantalla * 0.05;
 
     return Container(
       decoration: const BoxDecoration(
@@ -67,15 +67,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscure: true,
                 ),
 
+                SizedBox(height: espacio),
+
                 if (error  != "") ...[
-                  SizedBox(height: espacio),
                   Text(
                     error,
                     style: const TextStyle(color: Colors.red),
                   ),
                 ],
 
-                SizedBox(height: espacio),
+                SizedBox(height: 2),
 
                 CustomButton(
                   text: "Iniciar sesión",

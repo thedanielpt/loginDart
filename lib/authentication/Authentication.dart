@@ -5,10 +5,23 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class Authentication {
 
+  //Mandar email de restablecer la contraseña
+  Future<bool> enviarEmailResetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: email.trim(),
+      );
+      return true;
+    } on FirebaseAuthException catch (e) {
+      print("Firebase error: ${e.code}");
+      return false;
+    }
+  }
+
+
   Future<bool> iniciarSesion(email, contrasena) async {
 
     try {
-
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text,
         password: contrasena.text,
