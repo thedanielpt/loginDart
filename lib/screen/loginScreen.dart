@@ -1,9 +1,7 @@
-import 'package:fluter_maricarmen/screen/passwordForgetScreen.dart';
 import 'package:flutter/material.dart';
 import '../authentication/Authentication.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
-import 'registroScreen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -25,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     double anchoPantalla = MediaQuery.of(context).size.width * 0.8;
     double altoPantalla = MediaQuery.of(context).size.height * 0.78;
-    double espacio = altoPantalla * 0.05;
+    double espacio = altoPantalla * 0.04;
 
     return Container(
       decoration: const BoxDecoration(
@@ -67,16 +65,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscure: true,
                 ),
 
-                SizedBox(height: espacio),
 
-                if (error  != "") ...[
+
+                if (error.isNotEmpty) ...[
+                  SizedBox(height: 20),
                   Text(
                     error,
-                    style: const TextStyle(color: Colors.red),
+                    style: TextStyle(
+                      color: error == "Has iniciado sesión" ? Colors.green : Colors.red,
+                    ),
                   ),
                 ],
-
-                SizedBox(height: 2),
+                SizedBox(height: espacio),
 
                 CustomButton(
                   text: "Iniciar sesión",
@@ -105,12 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RegistroScreen(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, "/registro");
                   },
                   child: const Text(
                     "¿No tienes cuenta? Regístrate",
@@ -120,12 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => passwordForgetScreen(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, "/passwordForgetScreen");
                   },
                   child: const Text(
                     "¿Te has olvidado de tu contraseña?",

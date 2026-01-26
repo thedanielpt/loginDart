@@ -19,7 +19,6 @@ class _GesUserScreenState extends State<GesUserScreen> {
           fit: BoxFit.cover,
         ),
       ),
-
     );
   }
 

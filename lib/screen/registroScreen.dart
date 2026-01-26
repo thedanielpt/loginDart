@@ -92,13 +92,10 @@ class _RegistroScreenState extends State<RegistroScreen> {
                     }
 
                     if (await _authentication.registrarUsuario(_email, _password)) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => LoginScreen()),
-                      );
+                      Navigator.pushNamed(context, "/");
+                    } else {
+                      return;
                     }
-
-                    Navigator.pop(context);
                   },
                 ),
 
@@ -106,12 +103,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => LoginScreen(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, "/");
                   },
                   child: const Text(
                     "Volver al login",

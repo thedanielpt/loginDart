@@ -4,14 +4,14 @@ import '../authentication/Authentication.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
 
-class passwordForgetScreen extends StatefulWidget {
-  const passwordForgetScreen({super.key});
+class PasswordForgetScreen extends StatefulWidget {
+  const PasswordForgetScreen({super.key});
 
   @override
-  State<passwordForgetScreen> createState() => _passwordForgetScreenState();
+  State<PasswordForgetScreen> createState() => _PasswordForgetScreenState();
 }
 
-class _passwordForgetScreenState extends State<passwordForgetScreen> {
+class _PasswordForgetScreenState extends State<PasswordForgetScreen> {
   final TextEditingController _email = TextEditingController();
   
   String error = "";
@@ -90,12 +90,7 @@ class _passwordForgetScreenState extends State<passwordForgetScreen> {
                       return;
                     }
                     if (await _authentication.enviarEmailResetPassword(_email.text.trim())){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => LoginScreen(),
-                        ),
-                      );
+                      Navigator.pushNamed(context, "/");
                     } else {
                       setState(() {
                         error = "Email incorrecto";
@@ -106,12 +101,7 @@ class _passwordForgetScreenState extends State<passwordForgetScreen> {
 
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => LoginScreen(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, "/");
                   },
                   child: const Text(
                     "Volver al login",

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screen/loginScreen.dart';
+import 'navegator/navegation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // necesario para usar await
@@ -21,9 +22,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+    return MaterialApp(
+      title: 'Mi App',
+      initialRoute: "/",
+      routes: Navegation.routes,
     );
   }
 }
