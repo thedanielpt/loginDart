@@ -18,6 +18,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
   final Authentication _authentication = Authentication();
 
+
   @override
   Widget build(BuildContext context) {
     double anchoPantalla = MediaQuery.of(context).size.width * 0.8;
@@ -91,11 +92,15 @@ class _RegistroScreenState extends State<RegistroScreen> {
                       return;
                     }
 
-                    if (await _authentication.registrarUsuario(_email, _password)) {
-                      Navigator.pushNamed(context, "/");
-                    } else {
+                    if (RegExp(r'.*[^a-zA-Z0-9 ].*').hasMatch(_password.text)) {
                       return;
                     }
+
+                    if (!await _authentication.registrarUsuario(_email, _password)) {
+                      return;
+                    }
+
+                    Navigator.pushNamed(context, "/");
                   },
                 ),
 
