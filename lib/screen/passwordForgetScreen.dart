@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'loginScreen.dart';
 import '../authentication/Authentication.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_textfield.dart';
+import '../widgets/login/custom_button.dart';
+import '../widgets/login/custom_textfield.dart';
 
 class PasswordForgetScreen extends StatefulWidget {
   const PasswordForgetScreen({super.key});

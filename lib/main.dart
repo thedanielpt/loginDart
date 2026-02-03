@@ -25,6 +25,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Mi App',
+      debugShowCheckedModeBanner: false,
       initialRoute: "/",
       routes: Navegation.routes,
     );

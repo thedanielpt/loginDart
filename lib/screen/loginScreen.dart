@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../authentication/Authentication.dart';
-import '../widgets/custom_textfield.dart';
-import '../widgets/custom_button.dart';
+import '../widgets/login/custom_textfield.dart';
+import '../widgets/login/custom_button.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     //Comprueba si el usuario existe
                     if (await _authentication.iniciarSesion(_email, _contrasena)){
                       setState(() {
-                        error = "Has iniciado sesión";
+                        Navigator.pushNamed(context, "/admin");
                       });
                     } else {
                       setState(() {

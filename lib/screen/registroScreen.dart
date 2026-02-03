@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../authentication/Authentication.dart';
-import '../widgets/custom_textfield.dart';
-import '../widgets/custom_button.dart';
+import '../widgets/login/custom_textfield.dart';
+import '../widgets/login/custom_button.dart';
 import 'loginScreen.dart';
 
 class RegistroScreen extends StatefulWidget {
