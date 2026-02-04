@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/admin/dashboard/buttonDashboardAdmin.dart';
+import '../../widgets/admin/dashboard/buttonDashboardAdmin.dart'; // Asegúrate de que el nombre del archivo coincida
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -23,8 +23,8 @@ class _DashboardState extends State<Dashboard> {
         ),
         child: Center(
           child: Container(
-            width: 330,
-            padding: const EdgeInsets.symmetric(vertical: 40),
+            width: 350, // Ajustado para que quepan dos columnas cómodamente
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: const Color(0xCC1A1A40),
               borderRadius: BorderRadius.circular(20),
@@ -41,33 +41,56 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                Column(
+
+                // --- GRID DE CARDS ---
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ButtonMenuAdmin(
-                      text: 'Usuarios',
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/usuariosAdmin');
-                      },
+                    // Columna 1
+                    Expanded(
+                      child: Column(
+                        children: [
+                          CardMenuAdmin(
+                            text: 'Usuarios',
+                            onClick: () => Navigator.pushNamed(context, '/usuariosAdmin'),
+                          ),
+                          const SizedBox(height: 14),
+                          CardMenuAdmin(
+                            text: 'Partidos',
+                            onClick: () => Navigator.pushNamed(context, '/PartidosAdmin'),
+                          ),
+                          const SizedBox(height: 14),
+                          CardMenuAdmin(
+                            text: 'Pistas',
+                            onClick: () => Navigator.pushNamed(context, '/PistasAdmin'),
+                          ),
+                        ],
+                      ),
                     ),
-                    ButtonMenuAdmin(
-                      text: 'Equipos',
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/EquiposAdmin');
-                      },
+                    const SizedBox(width: 14), // Espacio entre columnas
+                    // Columna 2
+                    Expanded(
+                      child: Column(
+                        children: [
+                          CardMenuAdmin(
+                            text: 'Equipos',
+                            onClick: () => Navigator.pushNamed(context, '/EquiposAdmin'),
+                          ),
+                          const SizedBox(height: 14),
+                          CardMenuAdmin(
+                            text: 'Reservas',
+                            onClick: () => Navigator.pushNamed(context, '/ReservasAdmin'),
+                          ),
+                          const SizedBox(height: 14),
+                          CardMenuAdmin(
+                            text: 'Cerrar Sesión',
+                            danger: true,
+                            onClick: () => Navigator.pushNamed(context, '/'),
+                          ),
+                        ],
+                      ),
                     ),
-                    ButtonMenuAdmin(
-                      text: 'Cerrar sesión',
-                      danger: true,
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                    ),
-                  ]
-                      .map((widget) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 7),
-                    child: widget,
-                  ))
-                      .toList(),
+                  ],
                 ),
               ],
             ),

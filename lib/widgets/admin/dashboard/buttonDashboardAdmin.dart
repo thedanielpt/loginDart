@@ -1,36 +1,49 @@
-// lib/widgets/button_menu_admin.dart
 import 'package:flutter/material.dart';
 
-class ButtonMenuAdmin extends StatelessWidget {
+class CardMenuAdmin extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
   final bool danger;
+  final VoidCallback onClick;
 
-  const ButtonMenuAdmin({
+  const CardMenuAdmin({
     super.key,
     required this.text,
-    required this.onPressed,
     this.danger = false,
+    required this.onClick,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: danger ? Colors.red : Colors.blue,
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: onClick,
+      child: Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          // Si es danger usamos el rojo, si no el azul oscuro con opacidad
+          color: danger ? const Color(0xFF8B1E1E) : const Color(0xCC2C2C54),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: const Color(0xCCA6A6C5),
+            width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(0, 4), // Elevación
+            ),
+          ],
         ),
-        onPressed: onPressed,
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
+        // Center se encarga de que el texto esté justo en medio
+        child: Center(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
           ),
         ),
       ),

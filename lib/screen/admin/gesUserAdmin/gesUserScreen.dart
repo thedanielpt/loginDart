@@ -21,5 +21,4 @@ class _GesUserScreenState extends State<GesUserScreen> {
       ),
     );
   }
-
 }
