@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 
-class GesUserScreen extends StatefulWidget {
-  const GesUserScreen({super.key});
-
-  @override
-  State<GesUserScreen> createState() => _GesUserScreenState();
-}
-
-class _GesUserScreenState extends State<GesUserScreen> {
+class UserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {

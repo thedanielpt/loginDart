@@ -23,7 +23,7 @@ class _DashboardState extends State<Dashboard> {
         ),
         child: Center(
           child: Container(
-            width: 350, // Ajustado para que quepan dos columnas cómodamente
+            width: 350,
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: const Color(0xCC1A1A40),
@@ -40,9 +40,9 @@ class _DashboardState extends State<Dashboard> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 const SizedBox(height: 30),
 
-                // --- GRID DE CARDS ---
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -67,8 +67,9 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 14), // Espacio entre columnas
-                    // Columna 2
+
+                    const SizedBox(width: 14),
+
                     Expanded(
                       child: Column(
                         children: [
