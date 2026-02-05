@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class EquiposScreen extends StatelessWidget {
-  const EquiposScreen({super.key});
+class AdminEquiposScreen extends StatelessWidget {
+  const AdminEquiposScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

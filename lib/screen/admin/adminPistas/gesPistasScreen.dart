@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PistasScreen extends StatelessWidget {
-  const PistasScreen({super.key});
+class AdminPistasScreen extends StatelessWidget {
+  const AdminPistasScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

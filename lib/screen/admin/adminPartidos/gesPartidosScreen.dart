@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PartidosScreen extends StatelessWidget {
-  const PartidosScreen({super.key});
+class AdminPartidosScreen extends StatelessWidget {
+  const AdminPartidosScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

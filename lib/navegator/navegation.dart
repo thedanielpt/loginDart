@@ -17,10 +17,10 @@ class Navegation {
     "/passwordForgetScreen": (context) => PasswordForgetScreen(),
     "/admin": (context) => Dashboard(),
 
-    "/usuariosAdmin": (context) => UserScreen(),
-    "/PartidosAdmin": (context) => PartidosScreen(),
-    "/PistasAdmin": (context) => PistasScreen(),
-    "/EquiposAdmin": (context) => EquiposScreen(),
-    "/ReservasAdmin": (context) => ReservasScreen(),
+    "/usuariosAdmin": (context) => AdminUserScreen(),
+    "/PartidosAdmin": (context) => AdminPartidosScreen(),
+    "/PistasAdmin": (context) => AdminPistasScreen(),
+    "/EquiposAdmin": (context) => AdminEquiposScreen(),
+    "/ReservasAdmin": (context) => AdminReservasScreen(),
   };
 }

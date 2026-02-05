@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ReservasScreen extends StatelessWidget {
-  const ReservasScreen({super.key});
+class AdminReservasScreen extends StatelessWidget {
+  const AdminReservasScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
