@@ -8,6 +8,7 @@ import '../screen/admin/adminUsers/gesUserScreen.dart';
 import '../screen/admin/adminPistas/gesPistasScreen.dart';
 import '../screen/admin/adminPartidos/gesPartidosScreen.dart';
 import '../screen/admin/adminEquipos/gesEquiposScreen.dart';
+import '../screen/usuarios/home.dart';
 
 class Navegation {
   static final routes = <String, WidgetBuilder>{
@@ -22,5 +23,7 @@ class Navegation {
     "/PistasAdmin": (context) => AdminPistasScreen(),
     "/EquiposAdmin": (context) => AdminEquiposScreen(),
     "/ReservasAdmin": (context) => AdminReservasScreen(),
+
+    "/homeUsers": (context) => HomeScreenUsers(),
   };
 }

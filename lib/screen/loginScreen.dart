@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final Authentication _authentication = Authentication();
 
   String error = "";
+  String rol = "";
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +66,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscure: true,
                 ),
 
-
-
                 if (error.isNotEmpty) ...[
                   SizedBox(height: 20),
                   Text(
@@ -82,7 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   text: "Iniciar sesión",
                   onPressed: ()async {
 
-                    //Comprueba has dejado en blanco algun dato
                     if (_email.text == "" || _contrasena.text == "") {
                       setState(() {
                         error = "Falta poner el email o contraseña";
@@ -91,15 +89,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
 
                     //Comprueba si el usuario existe
-                    if (await _authentication.iniciarSesion(_email, _contrasena)){
-                      setState(() {
+                    rol = (await _authentication.iniciarSesion(_email, _contrasena))!;
+
+                    setState(() {
+                      if (rol == "admin"){
                         Navigator.pushNamed(context, "/admin");
-                      });
-                    } else {
-                      setState(() {
-                        error = "Email o contraseña incorrectos";
-                      });
-                    }
+                      }
+
+                      if (rol == "jugador" ||
+                          rol == "entrenador" ||
+                          rol == "arbitro"){
+                        Navigator.pushNamed(context, "/homeUsers");
+                      }
+
+                    });
                   }
                 ),
 

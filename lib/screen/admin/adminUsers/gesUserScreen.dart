@@ -25,7 +25,6 @@ class _AdminUserScreenState extends State<AdminUserScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Imagen de fondo
           Positioned.fill(
             child: Image.asset(
               'assets/rafa.png',
@@ -33,7 +32,6 @@ class _AdminUserScreenState extends State<AdminUserScreen> {
             ),
           ),
 
-          // Contenedor principal con transparencia
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.95,

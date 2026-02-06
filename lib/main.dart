@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Mi App',
       debugShowCheckedModeBanner: false,
-      initialRoute: "/admin",
+      initialRoute: "/",
       routes: Navegation.routes,
     );
   }

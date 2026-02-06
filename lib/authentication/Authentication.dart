@@ -21,19 +21,26 @@ class Authentication {
   }
 
 
-  Future<bool> iniciarSesion(email, contrasena) async {
-
+  Future<String?> iniciarSesion(email, contrasena) async {
+    String rol = "";
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text,
         password: contrasena.text,
       );
-      return true;
+      final user = _auth.currentUser;
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection("usuarios")
+          .doc(user?.uid)
+          .get();
+      rol = doc.get("rol");
+      if (rol != null) {
+        return rol;
+      }
     }catch (e) {
       print(e);
     }
-
-    return false;
+    return null;
   }
 
   //Registra el email junto con su contraseña
@@ -52,8 +59,8 @@ class Authentication {
       String uid = _auth.currentUser!.uid;
 
       await FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
-        'rol': "alumno",
-        'email': email,
+        'rol': "jugador",
+        'nombre': "",
       });
 
       return true;
