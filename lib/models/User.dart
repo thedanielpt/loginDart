@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   String nombre;
   String rol;
@@ -7,11 +9,11 @@ class User {
     required this.rol
   });
 
-  // Convertir de Firestore a objeto
-  factory User.fromFirestore(Map<String, dynamic> data, String id) {
+  factory User.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final data = doc.data() ?? {};
     return User(
-      nombre: data['nombre'] ?? '',
-      rol: data['rol'] ?? '',
+      nombre: (data['nombre'] ?? '') as String,
+      rol: (data['rol'] ?? '') as String,
     );
   }
 

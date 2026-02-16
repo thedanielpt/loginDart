@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../authentication/Authentication.dart';
 import '../widgets/login/custom_textfield.dart';
 import '../widgets/login/custom_button.dart';
-import 'loginScreen.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});

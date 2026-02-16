@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../widgets/admin/adminUsuarios/buildAdminButton.dart';
 import '../../../widgets/admin/adminUsuarios/buildDropdown.dart';
+import '../../../widgets/admin/adminUsuarios/userList.dart';
 // Importa tus widgets aquí
 // import 'package:tu_proyecto/widgets/button_admin_user.dart';
 // import 'package:tu_proyecto/widgets/dropdown_filter_admin.dart';
@@ -15,7 +16,7 @@ class AdminUserScreen extends StatefulWidget {
 }
 
 class _AdminUserScreenState extends State<AdminUserScreen> {
-  // Estados de la pantalla
+
   String pagina = "Gestión de Usuarios";
   String filtro = "TODOS";
   final List<String> roles = ["TODOS", "Admin", "Entrenador", "Jugador", "Arbitro"];
@@ -80,16 +81,14 @@ class _AdminUserScreenState extends State<AdminUserScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  /*const Expanded(
-                    child: UserListarUsuarios(),
-                  ),*/
+                  UserList(filtroUI: filtro),
 
                   const SizedBox(height: 20),
 
                   ButtonAdminUser(
                     text: "Principio",
                     fullWidth: true,
-                    onClick: () => Navigator.pushNamed(context, "admin"),
+                    onClick: () => Navigator.pushNamed(context, "/admin"),
                   ),
                 ],
               ),
