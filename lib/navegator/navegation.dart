@@ -16,7 +16,7 @@ class Navegation {
     "/gesUser": (context) => LoginScreen(),
     "/registro": (context) => RegistroScreen(),
     "/passwordForgetScreen": (context) => PasswordForgetScreen(),
-    "/admin": (context) => Dashboard(),
+    "/admin": (context) => DashboardScreen(),
 
     "/usuariosAdmin": (context) => AdminUserScreen(),
     "/PartidosAdmin": (context) => AdminPartidosScreen(),
