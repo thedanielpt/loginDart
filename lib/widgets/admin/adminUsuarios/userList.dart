@@ -107,8 +107,9 @@ class UserList extends StatelessWidget {
     return await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("¿Eliminar usuario?"),
-        content: const Text("Esta acción no se puede deshacer."),
+        backgroundColor: const Color(0xFF1A1A2E),
+        title: const Text("¿Eliminar usuario?", style: TextStyle(color: Colors.white)),
+        content: const Text("Esta acción no se puede deshacer.", style: TextStyle(color: Colors.white),),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

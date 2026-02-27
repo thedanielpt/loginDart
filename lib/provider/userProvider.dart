@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
 import '../models/user.dart';
+import '../service/userService.dart';
 
 class UserProvider extends ChangeNotifier {
-  final _ref = FirebaseFirestore.instance.collection('usuarios');
+  final UserService _service = UserService();
 
   List<User> _users = [];
   bool _isLoading = false;
@@ -18,52 +18,40 @@ class UserProvider extends ChangeNotifier {
     escucharUsuarios();
   }
 
-  // rol == null => TODOS
   void escucharUsuarios({String? rol}) {
     _isLoading = true;
     notifyListeners();
 
-    // corta la escucha anterior
     _sub?.cancel();
 
-    Query<Map<String, dynamic>> query = _ref;
-
-    // si rol NO es null => filtramos
-    if (rol != null) {
-      query = query.where('rol', isEqualTo: rol);
-    }
-
-    _sub = query.snapshots().listen(
-          (snap) {
-        _users = snap.docs.map((d) => User.fromDoc(d)).toList();
-        _isLoading = false;
-        notifyListeners();
-      },
-      onError: (e) {
-        print("Error leyendo usuarios: $e");
-        _users = [];
-        _isLoading = false;
-        notifyListeners();
-      },
+    // El Provider se suscribe al Stream que le da el servicio
+    _sub = _service.listarUsuarios(rol: rol).listen(
+            (lista) {
+          _users = lista;
+          _isLoading = false;
+          notifyListeners();
+        },
+        onError: (e) {
+          _isLoading = false;
+          notifyListeners();
+        }
     );
   }
 
   Future<void> deleteUser(String id) async {
     try {
-      // 1. Borramos los datos en Firestore (esto siempre lo hace el admin)
-      await _ref.doc(id).delete();
+      // 1. Hablamos con el servicio para borrar de la DB
+      await _service.eliminarDeFirestore(id);
 
-      // 2. Intentamos borrar el Auth (Solo funcionará si se borra a sí mismo)
+      // 2. Lógica de Auth (esta se queda en el provider o un AuthService)
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null && currentUser.uid == id) {
         await currentUser.delete();
       }
 
-      // 3. ¡IMPORTANTE! Notificamos a la UI para que el usuario desaparezca de la lista
-      notifyListeners();
-
+      // No hace falta cargar de nuevo, porque el Stream (_sub)
+      // detectará el borrado en Firestore y actualizará la lista solo.
     } catch (e) {
-      // Aquí podrías lanzar un error para que la UI muestre una alerta
       throw Exception("Error al eliminar: $e");
     }
   }

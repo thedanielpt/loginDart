@@ -4,22 +4,19 @@ import '../models/user.dart';
 class UserService {
   final _ref = FirebaseFirestore.instance.collection('usuarios');
 
-  Future<String> addUser(User user) async {
-    final doc = _ref.doc();
-    await doc.set(user.toMap());
-    return doc.id;
-  }
-
+  // Stream para la lista de usuarios
   Stream<List<User>> listarUsuarios({String? rol}) {
     Query<Map<String, dynamic>> query = _ref;
-
-    // Si rol es null o "TODOS", no filtramos nada
-    if (rol != "TODOS") {
+    if (rol != null && rol != "TODOS") {
       query = query.where('rol', isEqualTo: rol);
     }
+    return query.snapshots().map((snap) =>
+        snap.docs.map((doc) => User.fromDoc(doc)).toList()
+    );
+  }
 
-    return query.snapshots().map((snap) {
-      return snap.docs.map((doc) => User.fromDoc(doc)).toList();
-    });
+  // Método para borrar en Firestore
+  Future<void> eliminarDeFirestore(String id) async {
+    await _ref.doc(id).delete();
   }
 }
