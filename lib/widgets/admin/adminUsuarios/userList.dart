@@ -1,58 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../provider/UserProvider.dart';
+
 
 class UserList extends StatelessWidget {
   const UserList({super.key});
 
-  Color _rolColor(String rol) {
-    switch (rol.toLowerCase()) {
-      case "admin":
-        return Colors.redAccent;
-      case "entrenador":
-        return Colors.lightBlueAccent;
-      case "jugador":
-        return Colors.lightGreenAccent;
-      case "arbitro":
-        return Colors.amber;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  IconData _rolIcon(String rol) {
-    switch (rol.toLowerCase()) {
-      case "admin":
-        return Icons.shield;
-      case "entrenador":
-        return Icons.sports;
-      case "jugador":
-        return Icons.sports_soccer;
-      case "arbitro":
-        return Icons.gavel;
-      default:
-        return Icons.person;
-    }
-  }
-
-  String _rolLabel(String rol) {
-    switch (rol.toLowerCase()) {
-      case "admin":
-        return "ADMIN";
-      case "entrenador":
-        return "ENTRENADOR";
-      case "jugador":
-        return "JUGADOR";
-      case "arbitro":
-        return "ARBITRO";
-      default:
-        return rol.toUpperCase();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    // Escuchamos el provider
     final provider = context.watch<UserProvider>();
 
     if (provider.isLoading) {
@@ -63,100 +19,107 @@ class UserList extends StatelessWidget {
 
     if (users.isEmpty) {
       return const Center(
-        child: Text("No hay usuarios", style: TextStyle(color: Colors.white70)),
+        child: Text(
+          "No hay usuarios",
+          style: TextStyle(color: Colors.white70, fontSize: 18),
+        ),
       );
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       itemCount: users.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      // El separador es el Spacer que usabas entre cajas en Compose
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
-        final u = users[index];
-        final rolColor = _rolColor(u.rol);
-        final rolIcon = _rolIcon(u.rol);
+        final user = users[index];
 
+        // Este es el equivalente exacto a tu "CajaListar" de Compose
         return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           decoration: BoxDecoration(
-            color: const Color(0xB31A1A40),
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: Colors.white.withOpacity(0.10), width: 1),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.25),
-                blurRadius: 10,
-                offset: const Offset(0, 6),
-              ),
-            ],
+            // Color de fondo: Color(0xCC2C2C54)
+            color: const Color(0xCC2C2C54),
+            borderRadius: BorderRadius.circular(14),
+            // Borde: BorderStroke(1.dp, Color(0xCCA6A6C5))
+            border: Border.all(
+              color: const Color(0xCCA6A6C5),
+              width: 1,
+            ),
           ),
-          child: ListTile(
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            leading: Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: rolColor.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: rolColor.withOpacity(0.60), width: 1.5),
-              ),
-              alignment: Alignment.center,
-              child: Icon(rolIcon, color: rolColor, size: 22),
-            ),
-            title: Text(
-              u.nombre,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            subtitle: Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: rolColor.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(999),
-                  border: Border.all(color: rolColor.withOpacity(0.60), width: 1),
-                ),
-                child: Row(
+          child: Row(
+            // ESTA es la propiedad que buscas. Equivale a Alignment.CenterVertically
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  // Para que los textos se alineen a la izquierda
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(rolIcon, size: 14, color: rolColor),
-                    const SizedBox(width: 6),
                     Text(
-                      _rolLabel(u.rol),
-                      style: TextStyle(
-                        color: rolColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.6,
-                      ),
+                      user.nombre,
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      user.rol,
+                      style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 16),
                     ),
                   ],
                 ),
               ),
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.redAccent),
-                  onPressed: () {
-                    final id = u.id;
-                    if (id == null || id.isEmpty) return;
-                    context.read<UserProvider>().deleteUser(id);
-                  },
-                ),
-                const Icon(Icons.chevron_right, color: Colors.white70),
-              ],
-            ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit, color: Color(0xFFB6B6FF)),
+                    onPressed: () => Navigator.pushNamed(context, 'Modificar_usuario/${user.id}'),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Color(0xFFFF6B6B)),
+                    onPressed: () async {
+                      // 1. Esperamos a que el usuario responda al diálogo
+                      final bool? confirmar = await _mostrarDialogoConfirmacion(context);
+
+                      // 2. Si el usuario pulsó "ELIMINAR" (true)
+                      if (confirmar == true && user.id != null) {
+                        // Llamamos a tu función del provider (le ponemos el ! porque ya checkeamos null)
+                        await provider.deleteUser(user.id!);
+
+                        // Opcional: Mostrar un mensaje rápido de éxito
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Usuario eliminado correctamente")),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },
     );
+  }
+
+  Future<bool> _mostrarDialogoConfirmacion(BuildContext context) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("¿Eliminar usuario?"),
+        content: const Text("Esta acción no se puede deshacer."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("CANCELAR"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("ELIMINAR", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    ) ?? false;
   }
 }

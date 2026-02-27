@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 
@@ -14,7 +15,7 @@ class UserProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   UserProvider() {
-    escucharUsuarios(); // al iniciar: trae TODOS
+    escucharUsuarios();
   }
 
   // rol == null => TODOS
@@ -48,7 +49,23 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> deleteUser(String id) async {
-    await _ref.doc(id).delete();
+    try {
+      // 1. Borramos los datos en Firestore (esto siempre lo hace el admin)
+      await _ref.doc(id).delete();
+
+      // 2. Intentamos borrar el Auth (Solo funcionará si se borra a sí mismo)
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null && currentUser.uid == id) {
+        await currentUser.delete();
+      }
+
+      // 3. ¡IMPORTANTE! Notificamos a la UI para que el usuario desaparezca de la lista
+      notifyListeners();
+
+    } catch (e) {
+      // Aquí podrías lanzar un error para que la UI muestre una alerta
+      throw Exception("Error al eliminar: $e");
+    }
   }
 
   @override
