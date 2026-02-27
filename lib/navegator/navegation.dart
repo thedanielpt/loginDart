@@ -28,6 +28,9 @@ class Navegation {
     "/usuariosAdminModificar": (context) =>
     const AdminUserModificarCrearScreen(accion: "Modificar"),
 
+    "/usuariosAdminCrear": (context) =>
+    const AdminUserModificarCrearScreen(accion: "Crear"),
+
     "/PartidosAdmin": (context) => AdminPartidosScreen(),
     "/PistasAdmin": (context) => AdminPistasScreen(),
     "/EquiposAdmin": (context) => AdminEquiposScreen(),

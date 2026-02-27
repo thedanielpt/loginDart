@@ -76,8 +76,7 @@ class UserList extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.delete, color: Color(0xFFFF6B6B)),
                     onPressed: () async {
-                      final bool confirmar =
-                      await _mostrarDialogoConfirmacion(context);
+                      final bool confirmar = await _mostrarDialogoConfirmacion(context);
 
                       if (confirmar && user.id != null) {
                         await context.read<UserProvider>().deleteUser(user.id!);

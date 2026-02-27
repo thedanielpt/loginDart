@@ -89,7 +89,7 @@ class _AdminUserScreenState extends State<AdminUserScreen> {
                         child: ButtonAdminUser(
                           text: "Crear cuenta",
                           onClick: () =>
-                              Navigator.pushNamed(context, "Crear_usuario"),
+                              Navigator.pushNamed(context, "/usuariosAdminCrear"),
                         ),
                       ),
                       const SizedBox(width: 16),

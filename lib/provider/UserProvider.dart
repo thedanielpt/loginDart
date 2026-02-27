@@ -68,6 +68,20 @@ class UserProvider extends ChangeNotifier {
     _user = null;
   }
 
+  Future<void> crearUsuario({
+    required String email,
+    required String password,
+    required String nombre,
+    required String rol,
+  }) async {
+    try {
+      await _service.crearUsuario(email, password, nombre, rol);
+    } finally {
+      notifyListeners();
+      _user = null;
+    }
+  }
+
   @override
   void dispose() {
     _sub?.cancel();

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../provider/UserProvider.dart';
 
 class AdminUserModificarCrearScreen extends StatefulWidget {
-  final String accion;
+  final String accion; // "crear" o "modificar" (o lo que uses)
 
   const AdminUserModificarCrearScreen({
     super.key,
@@ -18,14 +18,23 @@ class AdminUserModificarCrearScreen extends StatefulWidget {
 class _AdminUserModificarCrearScreenState
     extends State<AdminUserModificarCrearScreen> {
   final TextEditingController _nombreController = TextEditingController();
+
+  // ✅ Solo para CREAR
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePass = true;
+
   String? _rolSeleccionado;
   bool _initialized = false;
-
   bool _saving = false;
+
+  bool get isCrear => widget.accion.toLowerCase() == "crear";
 
   @override
   void dispose() {
     _nombreController.dispose();
+    _emailController.dispose();      // ✅
+    _passwordController.dispose();   // ✅
     super.dispose();
   }
 
@@ -33,17 +42,6 @@ class _AdminUserModificarCrearScreenState
     if (_saving) return;
 
     final provider = context.read<UserProvider>();
-    final u = provider.user;
-
-    if (u == null) return;
-
-    final id = u.id;
-    if (id == null || id.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Error: el usuario no tiene id (docId)")),
-      );
-      return;
-    }
 
     final nombre = _nombreController.text.trim();
     final rol = _rolSeleccionado;
@@ -64,13 +62,44 @@ class _AdminUserModificarCrearScreenState
     setState(() => _saving = true);
 
     try {
-      await provider.modificarUsuario(id, nombre, rol);
+      if (isCrear) {
+        // ✅ CREAR
+        final email = _emailController.text.trim();
+        final pass = _passwordController.text;
+
+        if (email.isEmpty || !email.contains("@")) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Email inválido")),
+          );
+          return;
+        }
+        if (pass.length < 6) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("La contraseña debe tener al menos 6 caracteres")),
+          );
+          return;
+        }
+
+        await provider.crearUsuario(email: email, password: pass, nombre: nombre, rol: rol);
+
+      } else {
+        // ✅ MODIFICAR (tu lógica)
+        final u = provider.user;
+        if (u == null) return;
+
+        final id = u.id;
+        if (id == null || id.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Error: el usuario no tiene id (docId)")),
+          );
+          return;
+        }
+
+        await provider.modificarUsuario(id, nombre, rol);
+      }
 
       if (!mounted) return;
-
-      // Mejor que pushNamed: reemplazas o vuelves atrás
       Navigator.pushReplacementNamed(context, "/usuariosAdmin");
-      // o si vienes de la lista: Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -86,7 +115,8 @@ class _AdminUserModificarCrearScreenState
     final provider = context.watch<UserProvider>();
     final u = provider.user;
 
-    if (u != null && !_initialized) {
+    // ✅ Inicialización SOLO si es modificar
+    if (!isCrear && u != null && !_initialized) {
       _nombreController.text = u.nombre;
       _rolSeleccionado = ["Admin", "Jugador", "Arbitro", "Entrenador"].contains(u.rol)
           ? u.rol
@@ -94,12 +124,16 @@ class _AdminUserModificarCrearScreenState
       _initialized = true;
     }
 
-    if (provider.isLoading || u == null) {
+    // ✅ En crear NO necesitas esperar user
+    if (!isCrear && (provider.isLoading || u == null)) {
       return const Scaffold(
         backgroundColor: Color(0xFF1A1A40),
         body: Center(child: CircularProgressIndicator(color: Colors.white)),
       );
     }
+
+    final titulo = isCrear ? "Crear Usuario" : "Modificar Usuario";
+    final textoBoton = isCrear ? "Crear" : "Guardar Cambios";
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -130,8 +164,7 @@ class _AdminUserModificarCrearScreenState
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                 child: Container(
                   width: double.infinity,
                   constraints: const BoxConstraints(maxWidth: 500),
@@ -152,32 +185,82 @@ class _AdminUserModificarCrearScreenState
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Modificar Usuario",
-                        style: TextStyle(
+                      Text(
+                        titulo,
+                        style: const TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
                       ),
                       const Divider(color: Colors.white24, height: 40),
 
-                      const Text("Correo electrónico",
-                          style:
-                          TextStyle(color: Colors.white70, fontSize: 14)),
-                      const SizedBox(height: 8),
-                      Text(
-                        u.email,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      ),
+                      // ✅ SI CREAR: email + password editables
+                      if (isCrear) ...[
+                        const Text("Correo electrónico (usuario)",
+                            style: TextStyle(color: Colors.white70, fontSize: 14)),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: _emailController,
+                          enabled: !_saving,
+                          keyboardType: TextInputType.emailAddress,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.05),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
+                            prefixIcon: const Icon(Icons.email_outlined,
+                                color: Colors.white70),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
 
-                      const SizedBox(height: 24),
+                        const Text("Contraseña",
+                            style: TextStyle(color: Colors.white70, fontSize: 14)),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: _passwordController,
+                          enabled: !_saving,
+                          obscureText: _obscurePass,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.05),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
+                            prefixIcon: const Icon(Icons.lock_outline,
+                                color: Colors.white70),
+                            suffixIcon: IconButton(
+                              onPressed: _saving
+                                  ? null
+                                  : () => setState(() => _obscurePass = !_obscurePass),
+                              icon: Icon(
+                                _obscurePass ? Icons.visibility_off : Icons.visibility,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                      ] else ...[
+                        // ✅ SI MODIFICAR: email fijo como lo tenías
+                        const Text("Correo electrónico",
+                            style: TextStyle(color: Colors.white70, fontSize: 14)),
+                        const SizedBox(height: 8),
+                        Text(
+                          u!.email,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        const SizedBox(height: 24),
+                      ],
 
                       const Text("Nombre completo",
-                          style:
-                          TextStyle(color: Colors.white70, fontSize: 14)),
+                          style: TextStyle(color: Colors.white70, fontSize: 14)),
                       const SizedBox(height: 8),
                       TextField(
                         controller: _nombreController,
@@ -197,8 +280,7 @@ class _AdminUserModificarCrearScreenState
                       const SizedBox(height: 24),
 
                       const Text("Rol de usuario",
-                          style:
-                          TextStyle(color: Colors.white70, fontSize: 14)),
+                          style: TextStyle(color: Colors.white70, fontSize: 14)),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -208,7 +290,7 @@ class _AdminUserModificarCrearScreenState
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            value: _rolSeleccionado,
+                            value: _rolSeleccionado ?? "Jugador",
                             isExpanded: true,
                             dropdownColor: const Color(0xFF1A1A40),
                             style: const TextStyle(
@@ -249,8 +331,8 @@ class _AdminUserModificarCrearScreenState
                             child: CircularProgressIndicator(
                                 strokeWidth: 2, color: Colors.white),
                           )
-                              : const Text("Guardar Cambios",
-                              style: TextStyle(
+                              : Text(textoBoton,
+                              style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600)),
                         ),

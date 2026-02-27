@@ -51,4 +51,34 @@ class UserService {
       "rol": nuevoRol,
     });
   }
+
+  Future<void> crearUsuario(
+      String email,
+      String password,
+      String nombre,
+      String rol,
+      ) async {
+    try {
+
+      final cred = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final uid = cred.user!.uid;
+
+      await FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
+        'nombre': nombre,
+        'rol': rol,
+        'email': email,
+      });
+
+    } on fb.FirebaseAuthException catch (e) {
+      throw Exception(e.message ?? e.code);
+    } on FirebaseException catch (e) {
+      throw Exception(e.message ?? e.code);
+    } catch (e) {
+      throw Exception("Error inesperado");
+    }
+  }
 }
