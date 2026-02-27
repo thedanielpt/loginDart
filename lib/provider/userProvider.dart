@@ -4,37 +4,47 @@ import 'package:flutter/material.dart';
 import '../models/user.dart';
 
 class UserProvider extends ChangeNotifier {
-  final CollectionReference<Map<String, dynamic>> _ref =
-  FirebaseFirestore.instance.collection('usuarios');
+  final _ref = FirebaseFirestore.instance.collection('usuarios');
 
   List<User> _users = [];
   bool _isLoading = false;
-  String? _currentRolFilter;
-  StreamSubscription? _subscription;
+  StreamSubscription? _sub;
 
   List<User> get users => _users;
   bool get isLoading => _isLoading;
-  String? get currentRolFilter => _currentRolFilter;
 
   UserProvider() {
-    loadUsers();
+    escucharUsuarios(); // al iniciar: trae TODOS
   }
 
-  void loadUsers({String? rol}) {
-    if (rol == "TODOS") {
+  // rol == null => TODOS
+  void escucharUsuarios({String? rol}) {
+    _isLoading = true;
+    notifyListeners();
 
-    } else {
+    // corta la escucha anterior
+    _sub?.cancel();
 
+    Query<Map<String, dynamic>> query = _ref;
+
+    // si rol NO es null => filtramos
+    if (rol != null) {
+      query = query.where('rol', isEqualTo: rol);
     }
-  }
 
-  Future<void> addUser(User user) async {
-    final doc = _ref.doc();
-    await doc.set(user.toMap());
-  }
-
-  Future<void> updateUser(String id, User user) async {
-    await _ref.doc(id).update(user.toMap());
+    _sub = query.snapshots().listen(
+          (snap) {
+        _users = snap.docs.map((d) => User.fromDoc(d)).toList();
+        _isLoading = false;
+        notifyListeners();
+      },
+      onError: (e) {
+        print("Error leyendo usuarios: $e");
+        _users = [];
+        _isLoading = false;
+        notifyListeners();
+      },
+    );
   }
 
   Future<void> deleteUser(String id) async {
@@ -43,7 +53,7 @@ class UserProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    _subscription?.cancel();
+    _sub?.cancel();
     super.dispose();
   }
 }

@@ -103,7 +103,7 @@ class _AdminUserScreenState extends State<AdminUserScreen> {
 
                               // Actualiza el provider con el nuevo filtro
                               final rol = _mapFiltroToRol(newValue);
-                              context.read<UserProvider>().loadUsers(rol: rol);
+                              context.read<UserProvider>().escucharUsuarios(rol: rol);
                             }
                           },
                         ),
