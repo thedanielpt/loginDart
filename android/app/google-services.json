@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "223107202151",
+    "firebase_url": "https://gessportflutter-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "gessportflutter",
     "storage_bucket": "gessportflutter.firebasestorage.app"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "223107202151-otos1j4b8ter384lrngfsdd46lao3e0f.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "223107202151-tej5n4rjb88519eeeusdm20bcvjcl97n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fluterMaricarmen"
+              }
             }
           ]
         }

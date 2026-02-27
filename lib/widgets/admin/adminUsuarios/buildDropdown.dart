@@ -18,30 +18,23 @@ class DropdownFilterAdmin extends StatelessWidget {
       height: 55,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xCC2C2C54), // Azul oscuro con opacidad
+        color: const Color(0xCC2C2C54),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: const Color(0xCCA6A6C5), // Borde grisáceo
+          color: const Color(0xCCA6A6C5),
           width: 1,
         ),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
-          dropdownColor: const Color(0xFF1A1A40), // Fondo del menú desplegable (sólido)
+          dropdownColor: const Color(0xFF1A1A40),
           isExpanded: true,
           icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-          ),
-          // Mapeamos la lista de strings a los items del menú
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            );
-          }).toList(),
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+          items: items
+              .map((item) => DropdownMenuItem(value: item, child: Text(item)))
+              .toList(),
           onChanged: onChanged,
         ),
       ),

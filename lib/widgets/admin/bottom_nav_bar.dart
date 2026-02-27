@@ -32,7 +32,6 @@ class BottomNavBar extends StatelessWidget {
       selectedIndex: selectedTab,
       indicatorColor: const Color(0xFF2C2C54),
 
-      // 👇 FORZAMOS TEXTO BLANCO
       labelTextStyle: MaterialStateProperty.all(
         const TextStyle(
           color: Colors.white,

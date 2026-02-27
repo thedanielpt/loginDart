@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '223107202151',
     projectId: 'gessportflutter',
     authDomain: 'gessportflutter.firebaseapp.com',
+    databaseURL: 'https://gessportflutter-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'gessportflutter.firebasestorage.app',
     measurementId: 'G-29V2TDMRL1',
   );
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:223107202151:android:45d82829c459834ea568c2',
     messagingSenderId: '223107202151',
     projectId: 'gessportflutter',
+    databaseURL: 'https://gessportflutter-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'gessportflutter.firebasestorage.app',
   );
 
@@ -63,6 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:223107202151:ios:7520b0b10dd353cda568c2',
     messagingSenderId: '223107202151',
     projectId: 'gessportflutter',
+    databaseURL: 'https://gessportflutter-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'gessportflutter.firebasestorage.app',
     iosClientId: '223107202151-tej5n4rjb88519eeeusdm20bcvjcl97n.apps.googleusercontent.com',
     iosBundleId: 'com.example.fluterMaricarmen',
@@ -73,6 +76,7 @@ class DefaultFirebaseOptions {
     appId: '1:223107202151:ios:7520b0b10dd353cda568c2',
     messagingSenderId: '223107202151',
     projectId: 'gessportflutter',
+    databaseURL: 'https://gessportflutter-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'gessportflutter.firebasestorage.app',
     iosClientId: '223107202151-tej5n4rjb88519eeeusdm20bcvjcl97n.apps.googleusercontent.com',
     iosBundleId: 'com.example.fluterMaricarmen',
@@ -84,7 +88,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '223107202151',
     projectId: 'gessportflutter',
     authDomain: 'gessportflutter.firebaseapp.com',
+    databaseURL: 'https://gessportflutter-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'gessportflutter.firebasestorage.app',
     measurementId: 'G-X73WB5V9Z0',
   );
+
 }

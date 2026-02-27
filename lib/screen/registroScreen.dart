@@ -95,9 +95,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
                       return;
                     }
 
-                    if (!await _authentication.registrarUsuario(_email, _password)) {
-                      return;
-                    }
+                    await _authentication.registrarUsuario(_email, _password);
 
                     Navigator.pushNamed(context, "/");
                   },

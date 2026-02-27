@@ -45,31 +45,29 @@ class Authentication {
 
   //Registra el email junto con su contraseña
 
-  Future<bool> registrarUsuario(emailController, passwordController) async {
+  Future<void> registrarUsuario(emailController, passwordController) async {
     try {
       final email = emailController.text.trim();
       final password = passwordController.text.trim();
 
-      //Crea el usuario en auth
-      await _auth.createUserWithEmailAndPassword(
+      final cred = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      String uid = _auth.currentUser!.uid;
+      final uid = cred.user!.uid;
 
       await FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
-        'rol': "jugador",
-        'nombre': "",
+        'nombre': 'Prueba',
+        'rol': 'jugador',
       });
 
-      return true;
-
     } on FirebaseAuthException catch (e) {
-      print('Error Firebase: ${e.message}');
+      print('Auth error: ${e.code} - ${e.message}');
+    } on FirebaseException catch (e) {
+      print('Firestore error: ${e.code} - ${e.message}');
     } catch (e) {
       print('Error: $e');
     }
-    return false;
   }
 }

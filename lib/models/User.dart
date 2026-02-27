@@ -1,27 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  String nombre;
-  String rol;
+  final String? id;
+  final String nombre;
+  final String rol;
 
   User({
+    this.id,
     required this.nombre,
-    required this.rol
+    required this.rol,
   });
 
-  factory User.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final data = doc.data() ?? {};
+  factory User.fromMap(Map<String, dynamic> data, {required String id}) {
     return User(
-      nombre: (data['nombre'] ?? '') as String,
-      rol: (data['rol'] ?? '') as String,
+      id: id,
+      nombre: (data['nombre'] ?? 'Sin nombre').toString(),
+      rol: (data['rol'] ?? 'usuario').toString(),
     );
   }
 
-  // Convertir de objeto a Firestore
-  Map<String, dynamic> toMap() {
-    return {
-      'nombre': nombre,
-      'rol': rol,
-    };
+  factory User.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final data = doc.data() ?? <String, dynamic>{};
+    return User.fromMap(data, id: doc.id);
   }
+
+  Map<String, dynamic> toMap() => {
+    'nombre': nombre,
+    'rol': rol,
+  };
 }
