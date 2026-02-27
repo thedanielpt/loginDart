@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../models/user.dart';
+import '../models/User.dart';
 import '../service/userService.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -28,7 +28,7 @@ class UserProvider extends ChangeNotifier {
 
     _sub = _service.listarUsuarios(rol: rol).listen(
           (lista) {
-        _users = lista;
+        _users = lista.cast<User>();
         _isLoading = false;
         notifyListeners();
       },
@@ -44,7 +44,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _user = await _service.cogerUserById(id);
+      _user = (await _service.cogerUserById(id)) as User?;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -61,6 +61,11 @@ class UserProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> modificarUsuario(String uid, String nuevoNombre, String nuevoRol) async {
+    await _service.modificarUsuario(uid, nuevoNombre, nuevoRol);
+    _user = null;
   }
 
   @override

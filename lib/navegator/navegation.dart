@@ -23,10 +23,8 @@ class Navegation {
 
     "/admin": (context) => DashboardScreen(),
 
-    // ✅ YA NO SE CREA PROVIDER AQUÍ (porque está global en main)
     "/usuariosAdmin": (context) => const AdminUserScreen(),
 
-    // ✅ Pantalla detalle/modificar: usa el MISMO provider global
     "/usuariosAdminModificar": (context) =>
     const AdminUserModificarCrearScreen(accion: "Modificar"),
 

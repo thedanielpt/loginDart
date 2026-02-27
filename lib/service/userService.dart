@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
-import '../models/user.dart';
+import '../models/User.dart';
 
 class UserService {
   final _ref = FirebaseFirestore.instance.collection('usuarios');
@@ -40,5 +40,15 @@ class UserService {
   Future<void> deleteUserEverywhere(String id) async {
     await eliminarDeFirestore(id);
     await eliminarAuthSiEsCurrentUser(id);
+  }
+
+  Future<void> modificarUsuario(String uid, String nuevoNombre, String nuevoRol) async {
+    await FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .update({
+      "nombre": nuevoNombre,
+      "rol": nuevoRol,
+    });
   }
 }
