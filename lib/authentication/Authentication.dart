@@ -60,6 +60,7 @@ class Authentication {
       await FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
         'nombre': 'Prueba',
         'rol': 'jugador',
+        'email': email,
       });
 
     } on FirebaseAuthException catch (e) {

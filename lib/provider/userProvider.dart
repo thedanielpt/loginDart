@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../service/userService.dart';
@@ -11,8 +10,11 @@ class UserProvider extends ChangeNotifier {
   bool _isLoading = false;
   StreamSubscription? _sub;
 
+  User? _user;
+
   List<User> get users => _users;
   bool get isLoading => _isLoading;
+  User? get user => _user;
 
   UserProvider() {
     escucharUsuarios();
@@ -24,35 +26,40 @@ class UserProvider extends ChangeNotifier {
 
     _sub?.cancel();
 
-    // El Provider se suscribe al Stream que le da el servicio
     _sub = _service.listarUsuarios(rol: rol).listen(
-            (lista) {
-          _users = lista;
-          _isLoading = false;
-          notifyListeners();
-        },
-        onError: (e) {
-          _isLoading = false;
-          notifyListeners();
-        }
+          (lista) {
+        _users = lista;
+        _isLoading = false;
+        notifyListeners();
+      },
+      onError: (_) {
+        _isLoading = false;
+        notifyListeners();
+      },
     );
   }
 
-  Future<void> deleteUser(String id) async {
+  Future<void> cogerUserById(String id) async {
+    _isLoading = true;
+    notifyListeners();
+
     try {
-      // 1. Hablamos con el servicio para borrar de la DB
-      await _service.eliminarDeFirestore(id);
+      _user = await _service.cogerUserById(id);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
-      // 2. Lógica de Auth (esta se queda en el provider o un AuthService)
-      final currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null && currentUser.uid == id) {
-        await currentUser.delete();
-      }
+  Future<void> deleteUser(String id) async {
+    _isLoading = true;
+    notifyListeners();
 
-      // No hace falta cargar de nuevo, porque el Stream (_sub)
-      // detectará el borrado en Firestore y actualizará la lista solo.
-    } catch (e) {
-      throw Exception("Error al eliminar: $e");
+    try {
+      await _service.deleteUserEverywhere(id);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 

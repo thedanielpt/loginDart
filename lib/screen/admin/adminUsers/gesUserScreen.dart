@@ -101,7 +101,6 @@ class _AdminUserScreenState extends State<AdminUserScreen> {
                             if (newValue != null) {
                               setState(() => filtro = newValue);
 
-                              // Actualiza el provider con el nuevo filtro
                               final rol = _mapFiltroToRol(newValue);
                               context.read<UserProvider>().escucharUsuarios(rol: rol);
                             }
@@ -113,7 +112,6 @@ class _AdminUserScreenState extends State<AdminUserScreen> {
 
                   const SizedBox(height: 16),
 
-                  // UserList ya no necesita parámetros, lee del provider
                   const Expanded(child: UserList()),
 
                   const SizedBox(height: 20),
