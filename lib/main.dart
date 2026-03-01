@@ -1,3 +1,5 @@
+import 'package:fluter_maricarmen/provider/PistaProvider.dart';
+import 'package:fluter_maricarmen/provider/ReservaProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +19,8 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => ReservaProvider()),
+        ChangeNotifierProvider(create: (_) => PistaProvider()),
       ],
       child: const MyApp(),
     ),
@@ -30,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: Navegation.routes,
-      initialRoute: "/admin",
+      initialRoute: "/homeUsers",
       debugShowCheckedModeBanner: false,
     );
   }

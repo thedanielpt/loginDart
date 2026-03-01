@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../authentication/Authentication.dart';
+import '../models/User.dart';
+import '../provider/UserProvider.dart';
 import '../widgets/login/custom_textfield.dart';
 import '../widgets/login/custom_button.dart';
 
@@ -18,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final Authentication _authentication = Authentication();
 
   String error = "";
-  String rol = "";
+  User? user;
 
   @override
   Widget build(BuildContext context) {
@@ -79,31 +82,31 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 CustomButton(
                   text: "Iniciar sesión",
-                  onPressed: ()async {
-
-                    if (_email.text == "" || _contrasena.text == "") {
-                      setState(() {
-                        error = "Falta poner el email o contraseña";
-                      });
+                  onPressed: () async {
+                    if (_email.text.isEmpty || _contrasena.text.isEmpty) {
+                      setState(() => error = "Falta poner el email o contraseña");
                       return;
                     }
 
-                    //Comprueba si el usuario existe
-                    rol = (await _authentication.iniciarSesion(_email, _contrasena))!;
+                    // Llamamos a la autenticación
+                    final usuarioLogueado = await _authentication.iniciarSesion(_email, _contrasena);
 
-                    setState(() {
-                      if (rol == "admin"){
-                        Navigator.pushNamed(context, "/admin");
+                    if (usuarioLogueado != null) {
+                      // 1. Guardamos el usuario en el Provider para que toda la app lo tenga
+                      final userProv = context.read<UserProvider>();
+                      await userProv.cogerUserById(usuarioLogueado.id!);
+
+                      // 2. Navegamos según el rol
+                      if (usuarioLogueado.rol == "admin") {
+                        Navigator.pushReplacementNamed(context, "/admin");
+                      } else {
+                        // jugador, entrenador, arbitro, etc.
+                        Navigator.pushReplacementNamed(context, "/homeUsers");
                       }
-
-                      if (rol == "jugador" ||
-                          rol == "entrenador" ||
-                          rol == "arbitro"){
-                        Navigator.pushNamed(context, "/homeUsers");
-                      }
-
-                    });
-                  }
+                    } else {
+                      setState(() => error = "Email o contraseña incorrectos");
+                    }
+                  },
                 ),
 
                 TextButton(

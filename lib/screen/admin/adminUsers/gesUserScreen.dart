@@ -21,12 +21,11 @@ class _AdminUserScreenState extends State<AdminUserScreen> {
   int selectedTab = 0;
 
   late final List<BottomNavItem> navItems = const [
-    BottomNavItem(label: "Dashboard", icon: Icons.home, route: "/admin"),
-    BottomNavItem(label: "Salir", icon: Icons.exit_to_app, route: "/"),
-    BottomNavItem(label: "Ajustes", icon: Icons.settings, route: null),
+    BottomNavItem(label: "Dashboard", icon: Icons.home,        route: "/homeUsers"),
+    BottomNavItem(label: "Salir",     icon: Icons.exit_to_app, route: "/"),
+    BottomNavItem(label: "Ajustes",   icon: Icons.settings,    route: null),
   ];
 
-  /// Convierte el valor del dropdown al rol de Firestore (o null para todos)
   String? _mapFiltroToRol(String filtro) {
     switch (filtro) {
       case "TODOS":
