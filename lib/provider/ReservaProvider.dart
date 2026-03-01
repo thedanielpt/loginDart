@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/Reserva.dart';
 import '../service/reservaService.dart';
@@ -14,6 +15,12 @@ class ReservaProvider extends ChangeNotifier {
   // estado
   bool _isLoading = false;
   String? _error;
+
+  List<String> _horasOcupadas = [];
+  List<String> get horasOcupadas => _horasOcupadas;
+
+  bool _isLoadingHoras = false;
+  bool get isLoadingHoras => _isLoadingHoras;
 
   // subs separadas (no se pisan)
   StreamSubscription? _subReservas;
@@ -75,6 +82,30 @@ class ReservaProvider extends ChangeNotifier {
         _setError(e.toString());
       },
     );
+  }
+
+  Future<void> cargarHorasOcupadas(String fecha, String pistaId) async {
+    _isLoadingHoras = true;
+    _horasOcupadas = []; // Limpiamos antes de cargar
+    notifyListeners();
+
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection("reservas") // Asegúrate de que tu colección se llame así
+          .where("fecha", isEqualTo: fecha)
+          .where("pistaId", isEqualTo: pistaId)
+          .get();
+
+      // Extraemos solo el campo "hora" de cada reserva encontrada
+      _horasOcupadas = snapshot.docs.map((doc) => doc['hora'].toString()).toList();
+
+      print("Horas ocupadas cargadas: $_horasOcupadas");
+    } catch (e) {
+      print("Error al cargar horas ocupadas: $e");
+    } finally {
+      _isLoadingHoras = false;
+      notifyListeners();
+    }
   }
 
   // ======================

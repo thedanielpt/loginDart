@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedTab = 0;
 
-  // Tu lista de navegación personalizada
+
   late final List<BottomNavItem> navItems = const [
     BottomNavItem(label: "Dashboard", icon: Icons.home,        route: "/homeUsers"),
     BottomNavItem(label: "Salir",     icon: Icons.exit_to_app, route: "/"),
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // Usamos el BottomNavigationBar mapeando tus navItems
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTab,
         backgroundColor: const Color(0xFF1A1A40),
@@ -55,10 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
           if (item.route != null) {
             if (item.route == "/") {
-              // Navegación para Salir (limpia el historial)
+
               Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
             } else if (item.route != "/homeUsers") {
-              // Navegación a otras rutas si no es la actual
+
               Navigator.pushNamed(context, item.route!);
             }
           }

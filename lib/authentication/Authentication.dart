@@ -8,7 +8,7 @@ class Authentication {
 
   Future<User?> iniciarSesion(TextEditingController email, TextEditingController contrasena) async {
     try {
-      // 1. Usamos el alias 'auth' para la credencial
+
       auth.UserCredential credential = await _auth.signInWithEmailAndPassword(
         email: email.text.trim(),
         password: contrasena.text.trim(),
@@ -17,13 +17,13 @@ class Authentication {
       final String? uid = credential.user?.uid;
 
       if (uid != null) {
-        // 2. Obtenemos el documento de Firestore
+
         DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore.instance
             .collection("usuarios")
             .doc(uid)
             .get();
         if (doc.exists) {
-          // 3. Ahora 'User' se refiere a tu modelo y encontrará 'fromDoc'
+
           return User.fromDoc(doc);
         }
       }
