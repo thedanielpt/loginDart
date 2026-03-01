@@ -28,9 +28,9 @@ class _AdminReservasScreenState extends State<AdminReservasScreen> {
   @override
   void initState() {
     super.initState();
-    // Cargar todas al entrar (por si no se hizo en el provider constructor)
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ReservaProvider>().escucharReservas(); // todas
+      context.read<ReservaProvider>().escucharReservas(); 
     });
   }
 
@@ -43,7 +43,7 @@ class _AdminReservasScreenState extends State<AdminReservasScreen> {
   void _filtrarPorFecha() {
     final fecha = _fechaController.text.trim();
     if (fecha.isEmpty) {
-      context.read<ReservaProvider>().escucharReservas(); // todas
+      context.read<ReservaProvider>().escucharReservas(); 
     } else {
       context.read<ReservaProvider>().escucharReservas(fecha: fecha);
     }
@@ -52,61 +52,26 @@ class _AdminReservasScreenState extends State<AdminReservasScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(
-        selectedTab: selectedTab,
-        onTabSelected: (index) => setState(() => selectedTab = index),
-        items: navItems,
-      ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/rafa.png',
-              fit: BoxFit.cover,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/rafa.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: const Center(
+          child: Text(
+            'Reservas',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(blurRadius: 5, color: Colors.black, offset: Offset(2, 2)),
+              ],
             ),
           ),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.95,
-              height: MediaQuery.of(context).size.height * 0.95,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: const Color(0xCC1A1A40),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    pagina,
-                    style: const TextStyle(fontSize: 26, color: Colors.white),
-                  ),
-                  const SizedBox(height: 10),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ButtonAdminUser(
-                          text: "Crear reserva",
-                          onClick: () => Navigator.pushNamed(
-                            context,
-                            "/ReservasAdminCrear",
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  const Expanded(child: ReservaList()),
-
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

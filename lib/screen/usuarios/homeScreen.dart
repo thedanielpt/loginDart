@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/ReservaProvider.dart';
 import '../../provider/UserProvider.dart';
-import '../../widgets/admin/bottom_nav_bar.dart'; // Import donde está definido BottomNavItem
+import '../../widgets/admin/bottom_nav_bar.dart'; 
 import '../../widgets/home/ReservaCard.dart';
 import 'CrearReservaJugadorScreen.dart';
 

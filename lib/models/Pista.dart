@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Pista {
-  /// ID del documento en Firestore
+  
   final String id;
 
   final String nombre;

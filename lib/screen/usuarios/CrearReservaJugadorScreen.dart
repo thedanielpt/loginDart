@@ -14,11 +14,11 @@ class CrearReservaPorJugador extends StatefulWidget {
 class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
   int _selectedTab = 0;
   String? _pistaId;
-  String _fecha = ""; // YYYY-MM-DD
-  String _hora = "";   // HH:MM
+  String _fecha = ""; 
+  String _hora = "";   
   String? _error;
 
-  // Lista de horas totales (la "lista fija" que mencionas en tu Kotlin)
+  
   final List<String> _todasLasHoras = [
     "09:00", "10:00", "11:00", "12:00", "13:00",
     "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
@@ -29,8 +29,8 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
     final reservaProvider = context.watch<ReservaProvider>();
     final userProvider = context.watch<UserProvider>();
 
-    // Simulamos el LaunchedEffect de Kotlin: Filtrar horas disponibles
-    // horasDisponibles = todas - ocupadas
+    
+    
     List<String> horasDisponibles = _todasLasHoras
         .where((h) => !reservaProvider.horasOcupadas.contains(h))
         .toList();
@@ -55,22 +55,22 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
       ),
       body: Stack(
         children: [
-          // 1. Fondo de imagen (Rafa) - ContentScale.Crop
+          
           Positioned.fill(
             child: Image.asset('assets/rafa.png', fit: BoxFit.cover),
           ),
-          // 2. Capa oscura (Color(0x99000000))
+          
           Positioned.fill(
             child: Container(color: const Color(0x99000000)),
           ),
-          // 3. Contenido centrado
+          
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: const Color(0xCC1A1A40), // Mismo color que tu Kotlin
+                  color: const Color(0xCC1A1A40), 
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
@@ -87,7 +87,7 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
                       const SizedBox(height: 10),
                     ],
 
-                    // --- PISTA (Dropdown) ---
+                    
                     _buildLabel("Pista"),
                     DropdownButtonFormField<String>(
                       dropdownColor: const Color(0xFF1A1A40),
@@ -100,7 +100,7 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
                       onChanged: (val) {
                         setState(() {
                           _pistaId = val;
-                          _hora = ""; // Reset hora como en tu Kotlin
+                          _hora = ""; 
                         });
                         _checkHorasOcupadas();
                       },
@@ -108,7 +108,7 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
 
                     const SizedBox(height: 12),
 
-                    // --- FECHA (DatePicker) ---
+                    
                     _buildLabel("Fecha"),
                     InkWell(
                       onTap: () async {
@@ -121,7 +121,7 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
                         if (picked != null) {
                           setState(() {
                             _fecha = picked.toString().substring(0, 10);
-                            _hora = ""; // Reset hora
+                            _hora = ""; 
                           });
                           _checkHorasOcupadas();
                         }
@@ -134,7 +134,7 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
 
                     const SizedBox(height: 12),
 
-                    // --- HORA (Dropdown Filtrado) ---
+                    
                     _buildLabel("Hora"),
                     DropdownButtonFormField<String>(
                       dropdownColor: const Color(0xFF1A1A40),
@@ -151,7 +151,7 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
 
                     const SizedBox(height: 30),
 
-                    // --- BOTÓN CREAR ---
+                    
                     SizedBox(
                       width: double.infinity,
                       height: 55,
@@ -180,7 +180,7 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
 
   void _checkHorasOcupadas() {
     if (_pistaId != null && _fecha.isNotEmpty) {
-      // Elimina el int.parse y el as String. Usa la variable directamente.
+      
       context.read<ReservaProvider>().cargarHorasOcupadas(_fecha, _pistaId!);
     }
   }

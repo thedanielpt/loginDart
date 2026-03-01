@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart' as auth; // Alias para evitar conflictos
+import 'package:firebase_auth/firebase_auth.dart' as auth; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import '../models/User.dart';
@@ -33,7 +33,7 @@ class Authentication {
     return null;
   }
 
-  //Mandar email de restablecer la contraseña
+  
   Future<bool> enviarEmailResetPassword(String email) async {
     try {
       await auth.FirebaseAuth.instance.sendPasswordResetEmail(
@@ -46,7 +46,7 @@ class Authentication {
     }
   }
 
-  //Registra el email junto con su contraseña
+  
 
   Future<void> registrarUsuario(emailController, passwordController) async {
     try {

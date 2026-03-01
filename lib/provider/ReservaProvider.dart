@@ -7,12 +7,12 @@ import '../service/reservaService.dart';
 class ReservaProvider extends ChangeNotifier {
   final ReservaService _service = ReservaService();
 
-  // listas
+  
   List<Reserva> _reservas = [];
   List<Reserva> _reservasJugador = [];
   Reserva? _reserva;
 
-  // estado
+  
   bool _isLoading = false;
   String? _error;
 
@@ -22,7 +22,7 @@ class ReservaProvider extends ChangeNotifier {
   bool _isLoadingHoras = false;
   bool get isLoadingHoras => _isLoadingHoras;
 
-  // subs separadas (no se pisan)
+  
   StreamSubscription? _subReservas;
   StreamSubscription? _subReservasJugador;
 
@@ -48,13 +48,13 @@ class ReservaProvider extends ChangeNotifier {
   }
 
   int _cmpFechaHora(Reserva a, Reserva b) {
-    // yyyy-MM-dd + HH:mm => orden lexicográfico OK
+    
     final fa = "${a.fecha} ${a.hora}";
     final fb = "${b.fecha} ${b.hora}";
     return fa.compareTo(fb);
   }
 
-  // helper fechas
+  
   String _ymd(DateTime d) {
     final y = d.year.toString().padLeft(4, '0');
     final m = d.month.toString().padLeft(2, '0');
@@ -62,9 +62,9 @@ class ReservaProvider extends ChangeNotifier {
     return "$y-$m-$day";
   }
 
-  // ======================
-  // ADMIN: escuchar todas / por fecha
-  // ======================
+  
+  
+  
   void escucharReservas({String? fecha}) {
     _setLoading(true);
     _setError(null);
@@ -86,17 +86,17 @@ class ReservaProvider extends ChangeNotifier {
 
   Future<void> cargarHorasOcupadas(String fecha, String pistaId) async {
     _isLoadingHoras = true;
-    _horasOcupadas = []; // Limpiamos antes de cargar
+    _horasOcupadas = []; 
     notifyListeners();
 
     try {
       final snapshot = await FirebaseFirestore.instance
-          .collection("reservas") // Asegúrate de que tu colección se llame así
+          .collection("reservas") 
           .where("fecha", isEqualTo: fecha)
           .where("pistaId", isEqualTo: pistaId)
           .get();
 
-      // Extraemos solo el campo "hora" de cada reserva encontrada
+      
       _horasOcupadas = snapshot.docs.map((doc) => doc['hora'].toString()).toList();
 
       print("Horas ocupadas cargadas: $_horasOcupadas");
@@ -108,9 +108,9 @@ class ReservaProvider extends ChangeNotifier {
     }
   }
 
-  // ======================
-  // JUGADOR: escuchar sus reservas
-  // ======================
+  
+  
+  
   void escucharReservasJugador(String usuarioId, {String? fecha}) {
     _setLoading(true);
     _setError(null);
@@ -130,9 +130,9 @@ class ReservaProvider extends ChangeNotifier {
     );
   }
 
-  // ======================
-  // FILTROS ADMIN
-  // ======================
+  
+  
+  
   void filtrarHoyAdmin() {
     final hoy = _ymd(DateTime.now());
     escucharReservas(fecha: hoy);
@@ -182,9 +182,9 @@ class ReservaProvider extends ChangeNotifier {
 
   void quitarFiltrosAdmin() => escucharReservas();
 
-  // ======================
-  // FILTROS JUGADOR
-  // ======================
+  
+  
+  
   void filtrarHoyJugador(String usuarioId) {
     final hoy = _ymd(DateTime.now());
     escucharReservasJugador(usuarioId, fecha: hoy);
@@ -238,9 +238,9 @@ class ReservaProvider extends ChangeNotifier {
 
   void quitarFiltrosJugador(String usuarioId) => escucharReservasJugador(usuarioId);
 
-  // ======================
-  // CRUD
-  // ======================
+  
+  
+  
   Future<void> cogerReservaById(String id) async {
     _setLoading(true);
     _setError(null);

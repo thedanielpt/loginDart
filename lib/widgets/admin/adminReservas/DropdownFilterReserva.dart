@@ -19,7 +19,7 @@ class DropdownFilterPistas extends StatelessWidget {
   Widget build(BuildContext context) {
     final pistas = context.watch<PistaProvider>().pistas;
 
-    // Construye items: TODAS + pistas
+    
     final items = <_PistaDropdownItem>[
       const _PistaDropdownItem(label: "TODAS", pistaId: null),
       ...pistas.map((p) => _PistaDropdownItem(label: p.nombre, pistaId: p.id)),

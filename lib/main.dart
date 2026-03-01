@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: Navegation.routes,
-      initialRoute: "/homeUsers",
+      initialRoute: "/",
       debugShowCheckedModeBanner: false,
     );
   }

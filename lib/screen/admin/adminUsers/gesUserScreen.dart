@@ -31,13 +31,13 @@ class _AdminUserScreenState extends State<AdminUserScreen> {
       case "TODOS":
         return null;
       case "Admin":
-        return "admin";
+        return "Admin";
       case "Entrenador":
-        return "entrenador";
+        return "Entrenador";
       case "Jugador":
-        return "jugador";
+        return "Jugador";
       case "Arbitro":
-        return "arbitro";
+        return "Arbitro";
       default:
         return null;
     }

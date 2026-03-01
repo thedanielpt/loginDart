@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../provider/UserProvider.dart';
 
 class AdminUserModificarCrearScreen extends StatefulWidget {
-  final String accion; // "crear" o "modificar" (o lo que uses)
+  final String accion;
 
   const AdminUserModificarCrearScreen({
     super.key,
@@ -19,7 +19,6 @@ class _AdminUserModificarCrearScreenState
     extends State<AdminUserModificarCrearScreen> {
   final TextEditingController _nombreController = TextEditingController();
 
-  // ✅ Solo para CREAR
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePass = true;
@@ -33,8 +32,8 @@ class _AdminUserModificarCrearScreenState
   @override
   void dispose() {
     _nombreController.dispose();
-    _emailController.dispose();      // ✅
-    _passwordController.dispose();   // ✅
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -63,7 +62,6 @@ class _AdminUserModificarCrearScreenState
 
     try {
       if (isCrear) {
-        // ✅ CREAR
         final email = _emailController.text.trim();
         final pass = _passwordController.text;
 
@@ -83,7 +81,6 @@ class _AdminUserModificarCrearScreenState
         await provider.crearUsuario(email: email, password: pass, nombre: nombre, rol: rol);
 
       } else {
-        // ✅ MODIFICAR (tu lógica)
         final u = provider.user;
         if (u == null) return;
 
@@ -115,7 +112,6 @@ class _AdminUserModificarCrearScreenState
     final provider = context.watch<UserProvider>();
     final u = provider.user;
 
-    // ✅ Inicialización SOLO si es modificar
     if (!isCrear && u != null && !_initialized) {
       _nombreController.text = u.nombre;
       _rolSeleccionado = ["Admin", "Jugador", "Arbitro", "Entrenador"].contains(u.rol)
@@ -124,7 +120,7 @@ class _AdminUserModificarCrearScreenState
       _initialized = true;
     }
 
-    // ✅ En crear NO necesitas esperar user
+
     if (!isCrear && (provider.isLoading || u == null)) {
       return const Scaffold(
         backgroundColor: Color(0xFF1A1A40),
@@ -194,7 +190,7 @@ class _AdminUserModificarCrearScreenState
                       ),
                       const Divider(color: Colors.white24, height: 40),
 
-                      // ✅ SI CREAR: email + password editables
+
                       if (isCrear) ...[
                         const Text("Correo electrónico (usuario)",
                             style: TextStyle(color: Colors.white70, fontSize: 14)),
@@ -245,7 +241,7 @@ class _AdminUserModificarCrearScreenState
                         ),
                         const SizedBox(height: 24),
                       ] else ...[
-                        // ✅ SI MODIFICAR: email fijo como lo tenías
+
                         const Text("Correo electrónico",
                             style: TextStyle(color: Colors.white70, fontSize: 14)),
                         const SizedBox(height: 8),

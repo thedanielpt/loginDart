@@ -6,7 +6,7 @@ class UserService {
   final _ref = FirebaseFirestore.instance.collection('usuarios');
   final fb.FirebaseAuth _auth = fb.FirebaseAuth.instance;
 
-  // 🔹 Stream lista usuarios
+  
   Stream<List<User>> listarUsuarios({String? rol}) {
     Query<Map<String, dynamic>> query = _ref;
 
@@ -19,7 +19,7 @@ class UserService {
     );
   }
 
-  // 🔹 Obtener usuario por ID
+  
   Future<User?> cogerUserById(String id) async {
     final doc = await _ref.doc(id).get();
     if (!doc.exists) return null;

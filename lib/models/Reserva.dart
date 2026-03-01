@@ -4,8 +4,8 @@ class Reserva {
   final String id;
   final String usuarioId;
   final String pistaId;
-  final String fecha; // yyyy-MM-dd
-  final String hora;  // HH:mm
+  final String fecha; 
+  final String hora;  
 
   const Reserva({
     required this.id,

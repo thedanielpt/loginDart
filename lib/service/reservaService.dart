@@ -30,8 +30,8 @@ class ReservaService {
   }
 
   Stream<List<Reserva>> listarReservasRango({
-    required String fechaInicio, // yyyy-MM-dd
-    required String fechaFin,    // yyyy-MM-dd
+    required String fechaInicio, 
+    required String fechaFin,    
   }) {
     final query = _ref
         .where('fecha', isGreaterThanOrEqualTo: fechaInicio)
@@ -78,7 +78,7 @@ class ReservaService {
     return q.docs.isNotEmpty;
   }
 
-  /// Crea reserva pero si ya existe en ese slot, lanza error
+  
   Future<void> crearReservaSeguro(
       String usuarioId,
       String pistaId,

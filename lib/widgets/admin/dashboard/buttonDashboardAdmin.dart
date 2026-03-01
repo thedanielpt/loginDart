@@ -20,7 +20,7 @@ class CardMenuAdmin extends StatelessWidget {
         width: 100,
         height: 100,
         decoration: BoxDecoration(
-          // Si es danger usamos el rojo, si no el azul oscuro con opacidad
+          
           color: danger ? const Color(0xFF8B1E1E) : const Color(0xCC2C2C54),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
@@ -31,11 +31,11 @@ class CardMenuAdmin extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
               blurRadius: 4,
-              offset: const Offset(0, 4), // Elevación
+              offset: const Offset(0, 4), 
             ),
           ],
         ),
-        // Center se encarga de que el texto esté justo en medio
+        
         child: Center(
           child: Text(
             text,

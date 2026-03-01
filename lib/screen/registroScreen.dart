@@ -81,12 +81,12 @@ class _RegistroScreenState extends State<RegistroScreen> {
                   text: "Registrarse",
                   onPressed: () async {
 
-                    //Comprueba si el email o contraseña estan vacios
+                    
                     if (_email == "" || _password == "") {
                       return;
                     }
 
-                    //Comprueba si las contraseñas coinciden
+                    
                     if (_password.text != _repeatPassword.text) {
                       return;
                     }

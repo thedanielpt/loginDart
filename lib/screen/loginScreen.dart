@@ -88,19 +88,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       return;
                     }
 
-                    // Llamamos a la autenticación
+                    
                     final usuarioLogueado = await _authentication.iniciarSesion(_email, _contrasena);
 
                     if (usuarioLogueado != null) {
-                      // 1. Guardamos el usuario en el Provider para que toda la app lo tenga
+                      
                       final userProv = context.read<UserProvider>();
                       await userProv.cogerUserById(usuarioLogueado.id!);
 
-                      // 2. Navegamos según el rol
+                      
                       if (usuarioLogueado.rol == "admin") {
                         Navigator.pushReplacementNamed(context, "/admin");
                       } else {
-                        // jugador, entrenador, arbitro, etc.
+                        
                         Navigator.pushReplacementNamed(context, "/homeUsers");
                       }
                     } else {

@@ -19,7 +19,7 @@ class PistaProvider extends ChangeNotifier {
     escucharPistas();
   }
 
-  /// 🔹 Escucha en tiempo real
+  
   void escucharPistas({bool? activa, String? tipo}) {
     _isLoading = true;
     notifyListeners();
@@ -39,7 +39,7 @@ class PistaProvider extends ChangeNotifier {
     );
   }
 
-  /// 🔹 Cargar una pista para modificar
+  
   Future<void> cogerPistaById(String id) async {
     _isLoading = true;
     notifyListeners();
@@ -52,7 +52,7 @@ class PistaProvider extends ChangeNotifier {
     }
   }
 
-  /// 🔹 Crear
+  
   Future<String> crearPista({
     required String nombre,
     required String tipo,
@@ -77,7 +77,7 @@ class PistaProvider extends ChangeNotifier {
     }
   }
 
-  /// 🔹 Modificar
+  
   Future<void> modificarPista(
       String id, {
         required String nombre,
@@ -103,7 +103,7 @@ class PistaProvider extends ChangeNotifier {
     }
   }
 
-  /// 🔹 Eliminar
+  
   Future<void> deletePista(String id) async {
     _isLoading = true;
     notifyListeners();
@@ -116,7 +116,7 @@ class PistaProvider extends ChangeNotifier {
     }
   }
 
-  /// 🔹 Toggle activa
+  
   Future<void> setActiva(String id, bool activa) async {
     await _service.setActiva(id, activa);
   }

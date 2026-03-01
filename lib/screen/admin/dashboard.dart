@@ -13,7 +13,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int selectedTab = 0;
 
-  // Items como en Compose (route null = acción)
+  
   late final List<BottomNavItem> navItems = const [
     BottomNavItem(label: "Dashboard", icon: Icons.home, route: "/admin"),
     BottomNavItem(label: "Salir", icon: Icons.exit_to_app, route: "/"),
@@ -25,16 +25,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: Colors.transparent,
 
-      // ✅ AQUÍ YA VA TU BottomNavBar CUSTOM
+      
       bottomNavigationBar: BottomNavBar(
         selectedTab: selectedTab,
         onTabSelected: (index) {
           setState(() => selectedTab = index);
 
-          // Si quieres hacer algo en Ajustes (route null)
+          
           if (index == 2) {
-            // TODO: abrir modal o navegar a ajustes si creas la ruta
-            // showModalBottomSheet(...);
+            
+            
           }
         },
         items: navItems,
@@ -82,12 +82,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               }),
                               const SizedBox(height: 14),
                               AdminCard("Partidos", () {
-                                // ✅ OJO: en tus rutas es "/PartidosAdmin" (P mayúscula)
+                                
                                 Navigator.pushNamed(context, "/PartidosAdmin");
                               }),
                               const SizedBox(height: 14),
                               AdminCard("Pistas", () {
-                                // ✅ OJO: en tus rutas es "/PistasAdmin"
+                                
                                 Navigator.pushNamed(context, "/PistasAdmin");
                               }),
                             ],
@@ -100,12 +100,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: Column(
                             children: [
                               AdminCard("Equipos", () {
-                                // ✅ OJO: en tus rutas es "/EquiposAdmin"
+                                
                                 Navigator.pushNamed(context, "/EquiposAdmin");
                               }),
                               const SizedBox(height: 14),
                               AdminCard("Reservas", () {
-                                // ✅ OJO: en tus rutas es "/ReservasAdmin"
+                                
                                 Navigator.pushNamed(context, "/ReservasAdmin");
                               }),
                             ],

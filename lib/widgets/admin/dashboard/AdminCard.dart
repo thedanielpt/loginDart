@@ -26,7 +26,7 @@ class AdminCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: danger
                 ? const Color(0xFF8B1E1E)
-                : const Color(0xCC2C2C54), // azul translúcido
+                : const Color(0xCC2C2C54), 
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: const Color(0xCCA6A6C5),

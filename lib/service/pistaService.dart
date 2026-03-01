@@ -5,7 +5,7 @@ class PistaService {
   final CollectionReference<Map<String, dynamic>> _ref =
   FirebaseFirestore.instance.collection('pistas');
 
-  /// 🔹 Stream lista pistas (opcionalmente por activa/tipo)
+  
   Stream<List<Pista>> listarPistas({bool? activa, String? tipo}) {
     Query<Map<String, dynamic>> query = _ref;
 
@@ -16,22 +16,22 @@ class PistaService {
       query = query.where('tipo', isEqualTo: tipo);
     }
 
-    // Si tienes un campo "numero" o "nombre" y quieres orden:
-    // query = query.orderBy('numero');
+    
+    
 
     return query.snapshots().map(
           (snap) => snap.docs.map((doc) => Pista.fromDoc(doc)).toList(),
     );
   }
 
-  /// 🔹 Obtener pista por ID
+  
   Future<Pista?> cogerPistaById(String id) async {
     final doc = await _ref.doc(id).get();
     if (!doc.exists) return null;
     return Pista.fromDoc(doc);
   }
 
-  /// 🔹 Crear pista
+  
   Future<String> crearPista({
     required String nombre,
     required String tipo,
@@ -48,7 +48,7 @@ class PistaService {
     return doc.id;
   }
 
-  /// 🔹 Modificar pista
+  
   Future<void> modificarPista(
       String id, {
         required String nombre,
@@ -64,12 +64,12 @@ class PistaService {
     });
   }
 
-  /// 🔹 Eliminar pista
+  
   Future<void> deletePista(String id) async {
     await _ref.doc(id).delete();
   }
 
-  /// 🔹 Cambiar activa rápido (toggle)
+  
   Future<void> setActiva(String id, bool activa) async {
     await _ref.doc(id).update({'activa': activa});
   }

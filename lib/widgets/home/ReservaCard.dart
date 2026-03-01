@@ -3,8 +3,8 @@ import '../../models/Reserva.dart';
 
 class ReservaCard extends StatelessWidget {
   final Reserva reserva;
-  // En Dart, si quieres traer el nombre de la pista,
-  // podrías pasar el String nombrePista o usar un FutureBuilder/Provider aquí.
+  
+  
 
   const ReservaCard({super.key, required this.reserva});
 
