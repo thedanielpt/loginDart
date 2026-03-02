@@ -97,10 +97,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       await userProv.cogerUserById(usuarioLogueado.id!);
 
                       
-                      if (usuarioLogueado.rol == "admin") {
+                      if (usuarioLogueado.rol == "Admin") {
                         Navigator.pushReplacementNamed(context, "/admin");
-                      } else {
-                        
+                      } else if (usuarioLogueado.rol == "Jugador" || usuarioLogueado.rol == "Entrenador" ||
+                          usuarioLogueado.rol == "Arbitro") {
                         Navigator.pushReplacementNamed(context, "/homeUsers");
                       }
                     } else {

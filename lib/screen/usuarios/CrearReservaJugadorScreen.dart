@@ -117,6 +117,25 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
                           initialDate: DateTime.now().add(const Duration(days: 1)),
                           firstDate: DateTime.now(),
                           lastDate: DateTime(2027),
+                          builder: (context, child) {
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                dialogBackgroundColor: const Color(0xFF1A1A40), // <-- FONDO del popup
+                                colorScheme: const ColorScheme.dark(
+                                  primary: Colors.white,          // <-- color cabecera y botón OK
+                                  onPrimary: Color(0xFF1A1A40),   // <-- texto en cabecera
+                                  surface: Color(0xFF1A1A40),     // <-- fondo superficie
+                                  onSurface: Colors.white,        // <-- texto días
+                                ),
+                                textButtonTheme: TextButtonThemeData(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.white, // <-- CANCELAR / OK
+                                  ),
+                                ),
+                              ),
+                              child: child!,
+                            );
+                          },
                         );
                         if (picked != null) {
                           setState(() {
