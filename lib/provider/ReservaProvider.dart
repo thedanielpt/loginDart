@@ -85,7 +85,6 @@ class ReservaProvider extends ChangeNotifier {
           .where("pistaId", isEqualTo: pistaId)
           .get();
 
-      
       _horasOcupadas = snapshot.docs.map((doc) => doc['hora'].toString()).toList();
 
       print("Horas ocupadas cargadas: $_horasOcupadas");
@@ -117,19 +116,6 @@ class ReservaProvider extends ChangeNotifier {
     );
   }
 
-  void quitarFiltrosJugador(String usuarioId) => escucharReservasJugador(usuarioId);
-  
-  Future<void> cogerReservaById(String id) async {
-    _setLoading(true);
-    _setError(null);
-    try {
-      _reserva = await _service.cogerReservaById(id);
-    } catch (e) {
-      _setError(e.toString());
-    }
-    _setLoading(false);
-  }
-
   Future<void> crearReservaSeguro(
       String usuarioId,
       String pistaId,
@@ -142,15 +128,6 @@ class ReservaProvider extends ChangeNotifier {
     } catch (e) {
       _setError(e.toString());
       rethrow;
-    }
-  }
-
-  Future<void> deleteReserva(String id) async {
-    _setError(null);
-    try {
-      await _service.deleteReserva(id);
-    } catch (e) {
-      _setError(e.toString());
     }
   }
 

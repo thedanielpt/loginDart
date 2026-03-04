@@ -21,34 +21,6 @@ class ReservaService {
     );
   }
 
-  Stream<List<Reserva>> listarReservasRango({
-    required String fechaInicio, 
-    required String fechaFin,    
-  }) {
-    final query = _ref
-        .where('fecha', isGreaterThanOrEqualTo: fechaInicio)
-        .where('fecha', isLessThanOrEqualTo: fechaFin);
-
-    return query.snapshots().map(
-          (snap) => snap.docs.map((doc) => Reserva.fromDoc(doc)).toList(),
-    );
-  }
-
-  Stream<List<Reserva>> listarReservasJugadorRango({
-    required String usuarioId,
-    required String fechaInicio,
-    required String fechaFin,
-  }) {
-    final query = _ref
-        .where('usuarioId', isEqualTo: usuarioId)
-        .where('fecha', isGreaterThanOrEqualTo: fechaInicio)
-        .where('fecha', isLessThanOrEqualTo: fechaFin);
-
-    return query.snapshots().map(
-          (snap) => snap.docs.map((doc) => Reserva.fromDoc(doc)).toList(),
-    );
-  }
-
   Future<Reserva?> cogerReservaById(String id) async {
     final doc = await _ref.doc(id).get();
     if (!doc.exists) return null;
@@ -83,21 +55,6 @@ class ReservaService {
     }
 
     await _ref.add({
-      'usuarioId': usuarioId,
-      'pistaId': pistaId,
-      'fecha': fecha,
-      'hora': hora,
-    });
-  }
-
-  Future<void> modificarReserva(
-      String id,
-      String usuarioId,
-      String pistaId,
-      String fecha,
-      String hora,
-      ) async {
-    await _ref.doc(id).update({
       'usuarioId': usuarioId,
       'pistaId': pistaId,
       'fecha': fecha,
