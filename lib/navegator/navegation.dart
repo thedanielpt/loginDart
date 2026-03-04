@@ -11,7 +11,6 @@ import '../screen/admin/adminUsers/AdminUserModificarCrearScreen.dart';
 import '../screen/admin/adminPistas/gesPistasScreen.dart';
 import '../screen/admin/adminPartidos/gesPartidosScreen.dart';
 import '../screen/admin/adminEquipos/gesEquiposScreen.dart';
-import '../screen/admin/AdminReservas/gesReservasScreen.dart';
 
 import '../screen/usuarios/homeScreen.dart';
 
@@ -30,8 +29,6 @@ class Navegation {
 
     "/usuariosAdminCrear": (context) =>
     const AdminUserModificarCrearScreen(accion: "Crear"),
-
-    "/ReservasAdmin": (context) => AdminReservasScreen(),
 
     "/PartidosAdmin": (context) => AdminPartidosScreen(),
     "/PistasAdmin": (context) => AdminPistasScreen(),

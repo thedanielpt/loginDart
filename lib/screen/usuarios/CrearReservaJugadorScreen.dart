@@ -14,8 +14,8 @@ class CrearReservaPorJugador extends StatefulWidget {
 class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
   int _selectedTab = 0;
   String? _pistaId;
-  String _fecha = ""; 
-  String _hora = "";   
+  String _fecha = "";
+  String _hora = "";
   String? _error;
 
   
@@ -120,16 +120,16 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
                           builder: (context, child) {
                             return Theme(
                               data: Theme.of(context).copyWith(
-                                dialogBackgroundColor: const Color(0xFF1A1A40), // <-- FONDO del popup
+                                dialogBackgroundColor: const Color(0xFF1A1A40),
                                 colorScheme: const ColorScheme.dark(
-                                  primary: Colors.white,          // <-- color cabecera y botón OK
-                                  onPrimary: Color(0xFF1A1A40),   // <-- texto en cabecera
-                                  surface: Color(0xFF1A1A40),     // <-- fondo superficie
-                                  onSurface: Colors.white,        // <-- texto días
+                                  primary: Colors.white,
+                                  onPrimary: Color(0xFF1A1A40),
+                                  surface: Color(0xFF1A1A40),
+                                  onSurface: Colors.white,
                                 ),
                                 textButtonTheme: TextButtonThemeData(
                                   style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white, // <-- CANCELAR / OK
+                                    foregroundColor: Colors.white,
                                   ),
                                 ),
                               ),

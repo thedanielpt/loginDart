@@ -1,4 +1,3 @@
-import 'package:fluter_maricarmen/provider/PistaProvider.dart';
 import 'package:fluter_maricarmen/provider/ReservaProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +19,6 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ReservaProvider()),
-        ChangeNotifierProvider(create: (_) => PistaProvider()),
       ],
       child: const MyApp(),
     ),

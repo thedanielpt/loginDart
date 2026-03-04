@@ -91,7 +91,8 @@ class _RegistroScreenState extends State<RegistroScreen> {
                       return;
                     }
 
-                    if (RegExp(r'.*[^a-zA-Z0-9 ].*').hasMatch(_password.text)) {
+                    if (RegExp(r'.*[^a-zA-Z0-9 ].*').hasMatch(_password.text) ||
+                    _password.text.length < 6) {
                       return;
                     }
 
