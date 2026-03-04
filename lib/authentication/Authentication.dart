@@ -62,7 +62,7 @@ class Authentication {
 
       await FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
         'nombre': 'Prueba',
-        'rol': 'jugador',
+        'rol': 'Jugador',
         'email': email,
       });
 

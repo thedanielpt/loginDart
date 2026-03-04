@@ -54,23 +54,12 @@ class ReservaProvider extends ChangeNotifier {
     return fa.compareTo(fb);
   }
 
-  
-  String _ymd(DateTime d) {
-    final y = d.year.toString().padLeft(4, '0');
-    final m = d.month.toString().padLeft(2, '0');
-    final day = d.day.toString().padLeft(2, '0');
-    return "$y-$m-$day";
-  }
-
-  
-  
-  
   void escucharReservas({String? fecha}) {
     _setLoading(true);
     _setError(null);
 
     _subReservas?.cancel();
-    _subReservas = _service.listarReservas(fecha: fecha).listen(
+    _subReservas = _service.listarReservas().listen(
           (lista) {
         lista.sort(_cmpFechaHora);
         _reservas = lista;
@@ -107,122 +96,14 @@ class ReservaProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
   
   
-  
-  void escucharReservasJugador(String usuarioId, {String? fecha}) {
+  void escucharReservasJugador(String usuarioId) {
     _setLoading(true);
     _setError(null);
 
     _subReservasJugador?.cancel();
-    _subReservasJugador = _service.listarReservasJugador(usuarioId, fecha: fecha).listen(
-          (lista) {
-        lista.sort(_cmpFechaHora);
-        _reservasJugador = lista;
-        _setLoading(false);
-      },
-      onError: (e) {
-        _reservasJugador = [];
-        _setLoading(false);
-        _setError(e.toString());
-      },
-    );
-  }
-
-  
-  
-  
-  void filtrarHoyAdmin() {
-    final hoy = _ymd(DateTime.now());
-    escucharReservas(fecha: hoy);
-  }
-
-  void filtrarSemanaPasadaAdmin() {
-    final now = DateTime.now();
-    final ini = _ymd(now.subtract(const Duration(days: 7)));
-    final fin = _ymd(now);
-    _setLoading(true);
-    _setError(null);
-    _subReservas?.cancel();
-    _subReservas = _service.listarReservasRango(fechaInicio: ini, fechaFin: fin).listen(
-          (lista) {
-        lista.sort(_cmpFechaHora);
-        _reservas = lista;
-        _setLoading(false);
-      },
-      onError: (e) {
-        _reservas = [];
-        _setLoading(false);
-        _setError(e.toString());
-      },
-    );
-  }
-
-  void filtrarSemanaQueVieneAdmin() {
-    final now = DateTime.now();
-    final ini = _ymd(now);
-    final fin = _ymd(now.add(const Duration(days: 7)));
-    _setLoading(true);
-    _setError(null);
-    _subReservas?.cancel();
-    _subReservas = _service.listarReservasRango(fechaInicio: ini, fechaFin: fin).listen(
-          (lista) {
-        lista.sort(_cmpFechaHora);
-        _reservas = lista;
-        _setLoading(false);
-      },
-      onError: (e) {
-        _reservas = [];
-        _setLoading(false);
-        _setError(e.toString());
-      },
-    );
-  }
-
-  void quitarFiltrosAdmin() => escucharReservas();
-
-  
-  
-  
-  void filtrarHoyJugador(String usuarioId) {
-    final hoy = _ymd(DateTime.now());
-    escucharReservasJugador(usuarioId, fecha: hoy);
-  }
-
-  void filtrarSemanaPasadaJugador(String usuarioId) {
-    final now = DateTime.now();
-    final ini = _ymd(now.subtract(const Duration(days: 7)));
-    final fin = _ymd(now);
-    _setLoading(true);
-    _setError(null);
-    _subReservasJugador?.cancel();
-    _subReservasJugador = _service
-        .listarReservasJugadorRango(usuarioId: usuarioId, fechaInicio: ini, fechaFin: fin)
-        .listen(
-          (lista) {
-        lista.sort(_cmpFechaHora);
-        _reservasJugador = lista;
-        _setLoading(false);
-      },
-      onError: (e) {
-        _reservasJugador = [];
-        _setLoading(false);
-        _setError(e.toString());
-      },
-    );
-  }
-
-  void filtrarSemanaQueVieneJugador(String usuarioId) {
-    final now = DateTime.now();
-    final ini = _ymd(now);
-    final fin = _ymd(now.add(const Duration(days: 7)));
-    _setLoading(true);
-    _setError(null);
-    _subReservasJugador?.cancel();
-    _subReservasJugador = _service
-        .listarReservasJugadorRango(usuarioId: usuarioId, fechaInicio: ini, fechaFin: fin)
-        .listen(
+    _subReservasJugador = _service.listarReservasJugador(usuarioId).listen(
           (lista) {
         lista.sort(_cmpFechaHora);
         _reservasJugador = lista;
@@ -237,9 +118,6 @@ class ReservaProvider extends ChangeNotifier {
   }
 
   void quitarFiltrosJugador(String usuarioId) => escucharReservasJugador(usuarioId);
-
-  
-  
   
   Future<void> cogerReservaById(String id) async {
     _setLoading(true);

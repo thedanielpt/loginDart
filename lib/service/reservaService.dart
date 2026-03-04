@@ -4,25 +4,17 @@ import '../models/Reserva.dart';
 class ReservaService {
   final _ref = FirebaseFirestore.instance.collection('reservas');
 
-  Stream<List<Reserva>> listarReservas({String? fecha}) {
+  Stream<List<Reserva>> listarReservas() {
     Query<Map<String, dynamic>> query = _ref;
-
-    if (fecha != null && fecha.isNotEmpty) {
-      query = query.where('fecha', isEqualTo: fecha);
-    }
 
     return query.snapshots().map(
           (snap) => snap.docs.map((doc) => Reserva.fromDoc(doc)).toList(),
     );
   }
 
-  Stream<List<Reserva>> listarReservasJugador(String usuarioId, {String? fecha}) {
+  Stream<List<Reserva>> listarReservasJugador(String usuarioId) {
     Query<Map<String, dynamic>> query =
     _ref.where('usuarioId', isEqualTo: usuarioId);
-
-    if (fecha != null && fecha.isNotEmpty) {
-      query = query.where('fecha', isEqualTo: fecha);
-    }
 
     return query.snapshots().map(
           (snap) => snap.docs.map((doc) => Reserva.fromDoc(doc)).toList(),
@@ -90,20 +82,6 @@ class ReservaService {
       throw Exception("Ese horario ya está reservado.");
     }
 
-    await _ref.add({
-      'usuarioId': usuarioId,
-      'pistaId': pistaId,
-      'fecha': fecha,
-      'hora': hora,
-    });
-  }
-
-  Future<void> crearReserva(
-      String usuarioId,
-      String pistaId,
-      String fecha,
-      String hora,
-      ) async {
     await _ref.add({
       'usuarioId': usuarioId,
       'pistaId': pistaId,
