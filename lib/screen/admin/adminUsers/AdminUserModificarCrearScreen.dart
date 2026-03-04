@@ -18,12 +18,14 @@ class AdminUserModificarCrearScreen extends StatefulWidget {
 class _AdminUserModificarCrearScreenState
     extends State<AdminUserModificarCrearScreen> {
   final TextEditingController _nombreController = TextEditingController();
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   bool _obscurePass = true;
 
-  String? _rolSeleccionado;
+  // ✅ FIX: por defecto tiene valor real, no "visual"
+  String _rolSeleccionado = "Jugador";
+
   bool _initialized = false;
   bool _saving = false;
 
@@ -43,17 +45,11 @@ class _AdminUserModificarCrearScreenState
     final provider = context.read<UserProvider>();
 
     final nombre = _nombreController.text.trim();
-    final rol = _rolSeleccionado;
+    final rol = _rolSeleccionado; // ✅ nunca null
 
     if (nombre.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("El nombre no puede estar vacío")),
-      );
-      return;
-    }
-    if (rol == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Selecciona un rol")),
       );
       return;
     }
@@ -73,13 +69,19 @@ class _AdminUserModificarCrearScreenState
         }
         if (pass.length < 6) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("La contraseña debe tener al menos 6 caracteres")),
+            const SnackBar(
+              content: Text("La contraseña debe tener al menos 6 caracteres"),
+            ),
           );
           return;
         }
 
-        await provider.crearUsuario(email: email, password: pass, nombre: nombre, rol: rol);
-
+        await provider.crearUsuario(
+          email: email,
+          password: pass,
+          nombre: nombre,
+          rol: rol,
+        );
       } else {
         final u = provider.user;
         if (u == null) return;
@@ -112,14 +114,15 @@ class _AdminUserModificarCrearScreenState
     final provider = context.watch<UserProvider>();
     final u = provider.user;
 
+    // ✅ FIX: si es MODIFICAR, carga el rol real una vez
     if (!isCrear && u != null && !_initialized) {
       _nombreController.text = u.nombre;
-      _rolSeleccionado = ["Admin", "Jugador", "Arbitro", "Entrenador"].contains(u.rol)
-          ? u.rol
-          : "Jugador";
+
+      const roles = ["Admin", "Jugador", "Arbitro", "Entrenador"];
+      _rolSeleccionado = roles.contains(u.rol) ? u.rol : "Jugador";
+
       _initialized = true;
     }
-
 
     if (!isCrear && (provider.isLoading || u == null)) {
       return const Scaffold(
@@ -151,7 +154,7 @@ class _AdminUserModificarCrearScreenState
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.black.withOpacity(0.3),
-                    Colors.black.withOpacity(0.8)
+                    Colors.black.withOpacity(0.8),
                   ],
                 ),
               ),
@@ -184,16 +187,18 @@ class _AdminUserModificarCrearScreenState
                       Text(
                         titulo,
                         style: const TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                       const Divider(color: Colors.white24, height: 40),
 
-
                       if (isCrear) ...[
-                        const Text("Correo electrónico (usuario)",
-                            style: TextStyle(color: Colors.white70, fontSize: 14)),
+                        const Text(
+                          "Correo electrónico (usuario)",
+                          style: TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
                         const SizedBox(height: 8),
                         TextField(
                           controller: _emailController,
@@ -204,16 +209,18 @@ class _AdminUserModificarCrearScreenState
                             filled: true,
                             fillColor: Colors.white.withOpacity(0.05),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide.none),
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
                             prefixIcon: const Icon(Icons.email_outlined,
                                 color: Colors.white70),
                           ),
                         ),
                         const SizedBox(height: 16),
-
-                        const Text("Contraseña",
-                            style: TextStyle(color: Colors.white70, fontSize: 14)),
+                        const Text(
+                          "Contraseña",
+                          style: TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
                         const SizedBox(height: 8),
                         TextField(
                           controller: _passwordController,
@@ -224,8 +231,9 @@ class _AdminUserModificarCrearScreenState
                             filled: true,
                             fillColor: Colors.white.withOpacity(0.05),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide.none),
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
                             prefixIcon: const Icon(Icons.lock_outline,
                                 color: Colors.white70),
                             suffixIcon: IconButton(
@@ -233,7 +241,9 @@ class _AdminUserModificarCrearScreenState
                                   ? null
                                   : () => setState(() => _obscurePass = !_obscurePass),
                               icon: Icon(
-                                _obscurePass ? Icons.visibility_off : Icons.visibility,
+                                _obscurePass
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
                                 color: Colors.white70,
                               ),
                             ),
@@ -241,22 +251,26 @@ class _AdminUserModificarCrearScreenState
                         ),
                         const SizedBox(height: 24),
                       ] else ...[
-
-                        const Text("Correo electrónico",
-                            style: TextStyle(color: Colors.white70, fontSize: 14)),
+                        const Text(
+                          "Correo electrónico",
+                          style: TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
                         const SizedBox(height: 8),
                         Text(
                           u!.email,
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                         const SizedBox(height: 24),
                       ],
 
-                      const Text("Nombre completo",
-                          style: TextStyle(color: Colors.white70, fontSize: 14)),
+                      const Text(
+                        "Nombre completo",
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
+                      ),
                       const SizedBox(height: 8),
                       TextField(
                         controller: _nombreController,
@@ -266,17 +280,19 @@ class _AdminUserModificarCrearScreenState
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.05),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none),
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
                           prefixIcon: const Icon(Icons.person_outline,
                               color: Colors.white70),
                         ),
                       ),
-
                       const SizedBox(height: 24),
 
-                      const Text("Rol de usuario",
-                          style: TextStyle(color: Colors.white70, fontSize: 14)),
+                      const Text(
+                        "Rol de usuario",
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
+                      ),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -286,14 +302,15 @@ class _AdminUserModificarCrearScreenState
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            value: _rolSeleccionado ?? "Jugador",
+                            // ✅ FIX: valor real, sin ??
+                            value: _rolSeleccionado,
                             isExpanded: true,
                             dropdownColor: const Color(0xFF1A1A40),
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 16),
                             icon: const Icon(Icons.arrow_drop_down,
                                 color: Colors.white70),
-                            items: ["Admin", "Jugador", "Arbitro", "Entrenador"]
+                            items: const ["Admin", "Jugador", "Arbitro", "Entrenador"]
                                 .map((value) => DropdownMenuItem(
                               value: value,
                               child: Text(value),
@@ -301,8 +318,10 @@ class _AdminUserModificarCrearScreenState
                                 .toList(),
                             onChanged: _saving
                                 ? null
-                                : (newValue) =>
-                                setState(() => _rolSeleccionado = newValue),
+                                : (newValue) {
+                              if (newValue == null) return;
+                              setState(() => _rolSeleccionado = newValue);
+                            },
                           ),
                         ),
                       ),
@@ -318,7 +337,8 @@ class _AdminUserModificarCrearScreenState
                             backgroundColor: const Color(0xFF3D3D70),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                           child: _saving
                               ? const SizedBox(
@@ -327,10 +347,13 @@ class _AdminUserModificarCrearScreenState
                             child: CircularProgressIndicator(
                                 strokeWidth: 2, color: Colors.white),
                           )
-                              : Text(textoBoton,
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600)),
+                              : Text(
+                            textoBoton,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
 
@@ -341,8 +364,10 @@ class _AdminUserModificarCrearScreenState
                               ? null
                               : () => Navigator.pushReplacementNamed(
                               context, "/usuariosAdmin"),
-                          child: const Text("Volver",
-                              style: TextStyle(color: Colors.white54)),
+                          child: const Text(
+                            "Volver",
+                            style: TextStyle(color: Colors.white54),
+                          ),
                         ),
                       ),
                     ],
