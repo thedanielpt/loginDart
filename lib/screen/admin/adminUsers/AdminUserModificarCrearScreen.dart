@@ -23,7 +23,6 @@ class _AdminUserModificarCrearScreenState
 
   bool _obscurePass = true;
 
-  // ✅ FIX: por defecto tiene valor real, no "visual"
   String _rolSeleccionado = "Jugador";
 
   bool _initialized = false;
@@ -45,7 +44,7 @@ class _AdminUserModificarCrearScreenState
     final provider = context.read<UserProvider>();
 
     final nombre = _nombreController.text.trim();
-    final rol = _rolSeleccionado; // ✅ nunca null
+    final rol = _rolSeleccionado;
 
     if (nombre.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -114,7 +113,6 @@ class _AdminUserModificarCrearScreenState
     final provider = context.watch<UserProvider>();
     final u = provider.user;
 
-    // ✅ FIX: si es MODIFICAR, carga el rol real una vez
     if (!isCrear && u != null && !_initialized) {
       _nombreController.text = u.nombre;
 
@@ -302,7 +300,6 @@ class _AdminUserModificarCrearScreenState
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            // ✅ FIX: valor real, sin ??
                             value: _rolSeleccionado,
                             isExpanded: true,
                             dropdownColor: const Color(0xFF1A1A40),
