@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../provider/ReservaProvider.dart';
 import '../../provider/UserProvider.dart';
-import '../../widgets/admin/bottom_nav_bar.dart';
+
+import '../../theme/app_colors.dart';
+import '../../theme/date_picker_theme.dart';
+import '../../utils/app_assets.dart';
+import '../../utils/reserva_constants.dart';
+import '../../widgets/common/app_background.dart';
+import '../../widgets/common/app_card.dart';
+import '../../widgets/common/form_label.dart';
+import '../../widgets/common/app_input_decoration.dart';
 
 class CrearReservaPorJugador extends StatefulWidget {
   const CrearReservaPorJugador({super.key});
@@ -13,25 +22,17 @@ class CrearReservaPorJugador extends StatefulWidget {
 
 class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
   int _selectedTab = 0;
+
   String? _pistaId;
   String _fecha = "";
   String _hora = "";
   String? _error;
 
-  
-  final List<String> _todasLasHoras = [
-    "09:00", "10:00", "11:00", "12:00", "13:00",
-    "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
-  ];
-
   @override
   Widget build(BuildContext context) {
     final reservaProvider = context.watch<ReservaProvider>();
-    final userProvider = context.watch<UserProvider>();
 
-    
-    
-    List<String> horasDisponibles = _todasLasHoras
+    final horasDisponibles = ReservaConstants.horas
         .where((h) => !reservaProvider.horasOcupadas.contains(h))
         .toList();
 
@@ -39,13 +40,15 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
       extendBodyBehindAppBar: true,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTab,
-        backgroundColor: const Color(0xFF1A1A40),
+        backgroundColor: AppColors.dark,
         selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white60,
+        unselectedItemColor: AppColors.white60,
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
           setState(() => _selectedTab = index);
-          if (index == 1) Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+          if (index == 1) {
+            Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+          }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Dashboard'),
@@ -53,159 +56,149 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Ajustes'),
         ],
       ),
-      body: Stack(
-        children: [
-          
-          Positioned.fill(
-            child: Image.asset('assets/rafa.png', fit: BoxFit.cover),
-          ),
-          
-          Positioned.fill(
-            child: Container(color: const Color(0x99000000)),
-          ),
-          
-          Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: const Color(0xCC1A1A40), 
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      "Crear Reserva",
-                      style: TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
+      body: AppBackground(
+        asset: AppAssets.bgRafa,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: AppCard(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Crear Reserva",
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 18),
+                  ),
+                  const SizedBox(height: 18),
 
-                    if (_error != null) ...[
-                      Text(_error!, style: const TextStyle(color: Color(0xFFFFB4B4))),
-                      const SizedBox(height: 10),
-                    ],
+                  if (_error != null) ...[
+                    Text(
+                      _error!,
+                      style: const TextStyle(color: AppColors.errorSoft),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
 
-                    
-                    _buildLabel("Pista"),
-                    DropdownButtonFormField<String>(
-                      dropdownColor: const Color(0xFF1A1A40),
-                      style: const TextStyle(color: Colors.white),
-                      value: _pistaId,
-                      decoration: _inputDecoration("Selecciona una pista"),
-                      items: ["1", "2", "3", "4"].map((id) {
-                        return DropdownMenuItem(value: id, child: Text("Pista $id"));
-                      }).toList(),
-                      onChanged: (val) {
+                  const FormLabel("Pista"),
+                  DropdownButtonFormField<String>(
+                    dropdownColor: AppColors.dark,
+                    style: const TextStyle(color: Colors.white),
+                    value: _pistaId,
+                    decoration: appInputDecoration("Selecciona una pista"),
+                    items: ReservaConstants.pistas.map((id) {
+                      return DropdownMenuItem(
+                        value: id,
+                        child: Text("Pista $id"),
+                      );
+                    }).toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        _pistaId = val;
+                        _hora = "";
+                      });
+                      _checkHorasOcupadas();
+                    },
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  const FormLabel("Fecha"),
+                  InkWell(
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now().add(const Duration(days: 1)),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2027),
+                        builder: (context, child) {
+                          return Theme(
+                            data: buildDatePickerTheme(context),
+                            child: child!,
+                          );
+                        },
+                      );
+
+                      if (picked != null) {
                         setState(() {
-                          _pistaId = val;
-                          _hora = ""; 
+                          _fecha = picked.toString().substring(0, 10);
+                          _hora = "";
                         });
                         _checkHorasOcupadas();
-                      },
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    
-                    _buildLabel("Fecha"),
-                    InkWell(
-                      onTap: () async {
-                        DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now().add(const Duration(days: 1)),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2027),
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                dialogBackgroundColor: const Color(0xFF1A1A40),
-                                colorScheme: const ColorScheme.dark(
-                                  primary: Colors.white,
-                                  onPrimary: Color(0xFF1A1A40),
-                                  surface: Color(0xFF1A1A40),
-                                  onSurface: Colors.white,
-                                ),
-                                textButtonTheme: TextButtonThemeData(
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
-                        );
-                        if (picked != null) {
-                          setState(() {
-                            _fecha = picked.toString().substring(0, 10);
-                            _hora = ""; 
-                          });
-                          _checkHorasOcupadas();
-                        }
-                      },
-                      child: InputDecorator(
-                        decoration: _inputDecoration("Elegir fecha"),
-                        child: Text(_fecha.isEmpty ? "Elegir" : _fecha, style: const TextStyle(color: Colors.white)),
+                      }
+                    },
+                    child: InputDecorator(
+                      decoration: appInputDecoration("Elegir fecha"),
+                      child: Text(
+                        _fecha.isEmpty ? "Elegir" : _fecha,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
+                  ),
 
-                    const SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
-                    
-                    _buildLabel("Hora"),
-                    DropdownButtonFormField<String>(
-                      dropdownColor: const Color(0xFF1A1A40),
-                      style: const TextStyle(color: Colors.white),
-                      value: _hora.isEmpty ? null : _hora,
-                      decoration: _inputDecoration("Selecciona hora"),
-                      items: (_pistaId == null || _fecha.isEmpty)
-                          ? [const DropdownMenuItem(value: null, enabled: false, child: Text("Elige pista y fecha primero"))]
-                          : horasDisponibles.map((h) {
-                        return DropdownMenuItem(value: h, child: Text(h));
-                      }).toList(),
-                      onChanged: (val) => setState(() => _hora = val ?? ""),
-                    ),
+                  const FormLabel("Hora"),
+                  DropdownButtonFormField<String>(
+                    dropdownColor: AppColors.dark,
+                    style: const TextStyle(color: Colors.white),
+                    value: _hora.isEmpty ? null : _hora,
+                    decoration: appInputDecoration("Selecciona hora"),
+                    items: (_pistaId == null || _fecha.isEmpty)
+                        ? const [
+                            DropdownMenuItem<String>(
+                              value: null,
+                              enabled: false,
+                              child: Text("Elige pista y fecha primero"),
+                            )
+                          ]
+                        : horasDisponibles.map((h) {
+                            return DropdownMenuItem(value: h, child: Text(h));
+                          }).toList(),
+                    onChanged: (val) => setState(() => _hora = val ?? ""),
+                  ),
 
-                    const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-                    
-                    SizedBox(
-                      width: double.infinity,
-                      height: 55,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xCC2C2C54),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: const BorderSide(color: Color(0xCCA6A6C5)),
-                          ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.buttonBg,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: const BorderSide(color: AppColors.borderSoft),
                         ),
-                        onPressed: _enviarReserva,
-                        child: const Text("Crear Reserva", style: TextStyle(color: Colors.white, fontSize: 18)),
+                      ),
+                      onPressed: _enviarReserva,
+                      child: const Text(
+                        "Crear Reserva",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
-
   void _checkHorasOcupadas() {
     if (_pistaId != null && _fecha.isNotEmpty) {
-      
       context.read<ReservaProvider>().cargarHorasOcupadas(_fecha, _pistaId!);
     }
   }
 
-  void _enviarReserva() async {
+  Future<void> _enviarReserva() async {
     final user = context.read<UserProvider>().user;
+
     if (_pistaId == null || _fecha.isEmpty || _hora.isEmpty) {
       setState(() => _error = "Rellena pista, fecha y hora.");
       return;
@@ -213,38 +206,14 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
 
     try {
       await context.read<ReservaProvider>().crearReservaSeguro(
-        user!.id!,
-        _pistaId!,
-        _fecha,
-        _hora,
-      );
+            user!.id!,
+            _pistaId!,
+            _fecha,
+            _hora,
+          );
       if (mounted) Navigator.pop(context);
     } catch (e) {
       setState(() => _error = e.toString());
     }
-  }
-
-  Widget _buildLabel(String text) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Text(text, style: const TextStyle(color: Colors.white70, fontSize: 14)),
-    );
-  }
-
-  InputDecoration _inputDecoration(String hint) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: const TextStyle(color: Colors.white38),
-      filled: true,
-      fillColor: Colors.transparent,
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Color(0xCCA6A6C5)),
-      ),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
-      ),
-    );
   }
 }
