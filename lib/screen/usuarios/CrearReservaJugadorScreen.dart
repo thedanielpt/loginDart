@@ -12,6 +12,7 @@ import '../../widgets/common/app_background.dart';
 import '../../widgets/common/app_card.dart';
 import '../../widgets/common/form_label.dart';
 import '../../widgets/common/app_input_decoration.dart';
+import '../../utils/reserva_actions.dart';
 
 class CrearReservaPorJugador extends StatefulWidget {
   const CrearReservaPorJugador({super.key});
@@ -100,7 +101,7 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
                         _pistaId = val;
                         _hora = "";
                       });
-                      _checkHorasOcupadas();
+                      ReservaActions.checkHorasOcupadas(context, _pistaId, _fecha);();
                     },
                   ),
 
@@ -127,7 +128,7 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
                           _fecha = picked.toString().substring(0, 10);
                           _hora = "";
                         });
-                        _checkHorasOcupadas();
+                        ReservaActions.checkHorasOcupadas(context, _pistaId, _fecha);();
                       }
                     },
                     child: InputDecorator(
@@ -174,7 +175,22 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
                           side: const BorderSide(color: AppColors.borderSoft),
                         ),
                       ),
-                      onPressed: _enviarReserva,
+                      onPressed: () async {
+
+                        final error = await ReservaActions.enviarReserva(
+                          context,
+                          _pistaId,
+                          _fecha,
+                          _hora,
+                        );
+
+                        if (error != null) {
+                          setState(() => _error = error);
+                          return;
+                        }
+
+                        if (mounted) Navigator.pop(context);
+                      },
                       child: const Text(
                         "Crear Reserva",
                         style: TextStyle(color: Colors.white, fontSize: 18),
@@ -188,32 +204,5 @@ class _CrearReservaPorJugadorState extends State<CrearReservaPorJugador> {
         ),
       ),
     );
-  }
-
-  void _checkHorasOcupadas() {
-    if (_pistaId != null && _fecha.isNotEmpty) {
-      context.read<ReservaProvider>().cargarHorasOcupadas(_fecha, _pistaId!);
-    }
-  }
-
-  Future<void> _enviarReserva() async {
-    final user = context.read<UserProvider>().user;
-
-    if (_pistaId == null || _fecha.isEmpty || _hora.isEmpty) {
-      setState(() => _error = "Rellena pista, fecha y hora.");
-      return;
-    }
-
-    try {
-      await context.read<ReservaProvider>().crearReservaSeguro(
-            user!.id!,
-            _pistaId!,
-            _fecha,
-            _hora,
-          );
-      if (mounted) Navigator.pop(context);
-    } catch (e) {
-      setState(() => _error = e.toString());
-    }
   }
 }
